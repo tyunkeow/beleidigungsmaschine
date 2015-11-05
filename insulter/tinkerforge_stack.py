@@ -11,8 +11,9 @@ import sys
 
 
 class PiTinkerforgeStack:
-    host = '192.168.178.27' #raspi
+    #host = '192.168.178.27' #raspi
     #host = '127.0.0.1' #localhost
+    host = 'brickd'
     port = 4223
     uid_master = '6JKxCC'
     uid_motion = 'oRL'

@@ -12,14 +12,17 @@ ADD ./data/audio/m/* ${AUDIO}/m/
 
 ADD ./data/audio/f/* ${AUDIO}/f/
 
-ADD *.py $HOME
-
 RUN apt-get update && apt-get install -y \
     alsa \
     sox
 
 RUN pip install tinkerforge
 
+ADD *.py $HOME
+
+ADD *.sh $HOME
+
 WORKDIR ${HOME}
 
-RUN ["python", "tinkerforge_stack.py"]
+#CMD ["python", "tinkerforge_stack.py"]
+CMD ["./run_insulter.sh"]

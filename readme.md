@@ -7,7 +7,7 @@ Installation
 * Start Pi with the SD card and login as root
 * `git clone git://github.com/tyunkeow/beleidigungsmaschine.git`
 * `cd beleidigungsmaschine`
-* `build.sh`
-* `run.sh`
+* `./build.sh`
+* `./run.sh`
  
 
