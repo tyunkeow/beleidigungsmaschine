@@ -3,11 +3,11 @@ from tinkerforge.brick_master import Master
 from tinkerforge.bricklet_motion_detector import MotionDetector
 from tinkerforge.bricklet_rotary_poti import RotaryPoti
 from tinkerforge.bricklet_io4 import IO4
-from insulter import speak_next_insult
+#from insulter import speak_next_insult
 from text2sound import play_sound, AUDIO_DIR
 from time import sleep
 import sys
-
+import insulter
 
 
 class PiTinkerforgeStack:
@@ -29,6 +29,7 @@ class PiTinkerforgeStack:
         self.poti_left = RotaryPoti(self.uid_poti_left, self.con)
         self.poti_right = RotaryPoti(self.uid_poti_right, self.con)
         self.io = IO4(self.uid_io, self.con)
+        self.insulter = Insulter()
         print "---" + str(15^15)
         print "---" + str(15^14)
 
@@ -50,7 +51,7 @@ class PiTinkerforgeStack:
         ziel_geschlecht = "m"
         if self.female:
             ziel_geschlecht = "f"
-        speak_next_insult(ziel_geschlecht, self.poti_left.get_position(), self.poti_right.get_position())
+        self.insulter.speak_next_insult(ziel_geschlecht, self.poti_left.get_position(), self.poti_right.get_position())
 
     def motion_cycle_ended(self):
         print "READY for motion detection!"
