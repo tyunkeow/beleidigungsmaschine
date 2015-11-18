@@ -6,7 +6,8 @@ import time
 
 DEFAULT_VOLUME = 50
 DEFAULT_SPEED = 1
-AUDIO_DIR = os.path.dirname(os.path.abspath(__file__)) + '/data/audio/'
+#AUDIO_DIR = '/data/audio/'
+AUDIO_DIR = os.environ['AUDIO']
 
 def text2soundfile(text, filename, overwrite=False):
     filename = os.path.expanduser(filename)
