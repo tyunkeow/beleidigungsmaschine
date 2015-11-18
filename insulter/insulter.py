@@ -3,6 +3,7 @@
 
 import json
 import random
+import syslog
 from text2sound import play_sound, text2soundfile, AUDIO_DIR
 
 FILENAME_PATTERN = AUDIO_DIR + '{}/insult{}.aiff'
@@ -10,6 +11,7 @@ FILENAME_PATTERN = AUDIO_DIR + '{}/insult{}.aiff'
 class Insulter:
 
     def __init__(self):
+        syslog.openlog("insultr")
         with open('insult_db.json') as json_data:
             self.ins_data = json.load(json_data)
             json_data.close()
@@ -53,7 +55,7 @@ class Insulter:
         else:
             max = 1344
         fn = FILENAME_PATTERN.format(ziel_geschlecht, random.randint(0, max))
-        print "speaking insult " + str(fn)
+        log("speaking insult " + str(fn))
         play_sound(fn, control*4, 1+((speed)/200.0))
 
 
@@ -76,9 +78,11 @@ class Insulter:
                     adjektiv = adj[g]
                     steigerung = steig
                     text = "Du {} {} {}".format(steigerung, adjektiv, substantiv)
-                    #print "Writing {} to {}".format(text, filename)
+                    #log "Writing {} to {}".format(text, filename)
                     text2soundfile(text, filename)
 
+    def log(self, msg):
+        syslog.syslog(msg)
 
 if __name__ == "__main__":
     insulter = Insulter()

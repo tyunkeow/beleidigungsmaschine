@@ -7,6 +7,7 @@ from text2sound import play_sound, AUDIO_DIR
 from time import sleep
 import sys
 import insulter
+import syslog
 
 
 class PiTinkerforgeStack:
@@ -22,6 +23,7 @@ class PiTinkerforgeStack:
     female = False
 
     def __init__(self):
+        syslog.openlog("insultr-tf")
         self.con = IPConnection()
         self.master = Master(self.uid_master, self.con)
         self.motion = MotionDetector(self.uid_motion, self.con)
@@ -29,21 +31,23 @@ class PiTinkerforgeStack:
         self.poti_right = RotaryPoti(self.uid_poti_right, self.con)
         self.io = IO4(self.uid_io, self.con)
         self.insulter = Insulter()
-        print "---" + str(15^15)
-        print "---" + str(15^14)
+        log("---" + str(15^15))
+        log("---" + str(15^14))
 
+    def log(self, msg):
+        syslog.syslog(msg)
 
     def connect(self):
-        print "Connecting to host " + self.host + " on port " + str(self.port)
+        log("Connecting to host " + self.host + " on port " + str(self.port))
         self.con.connect(self.host, self.port)
         self.set_ziel_geschlecht(self.io.get_value())
 
     def disconnect(self):
-        print "Disconnecting from host " + self.host
+        log("Disconnecting from host " + self.host)
         self.con.disconnect()
 
     def motion_detected(self):
-        print "CALLBACK!!"
+        log("CALLBACK!!")
         self.insult()
 
     def insult(self):
@@ -53,38 +57,38 @@ class PiTinkerforgeStack:
         self.insulter.speak_next_insult(ziel_geschlecht, self.poti_left.get_position(), self.poti_right.get_position())
 
     def motion_cycle_ended(self):
-        print "READY for motion detection!"
+        log("READY for motion detection!")
 
     def io_switch(self, interrupt_mask, value_mask):
-        print "IO4 triggered"
-        print('Interrupt by: ' + str(bin(interrupt_mask)))
-        print('Value: ' + str(bin(value_mask)))
+        log("IO4 triggered")
+        log('Interrupt by: ' + str(bin(interrupt_mask)))
+        log('Value: ' + str(bin(value_mask)))
         #print('Val1: ' + str(value_mask))
 
         if interrupt_mask == 1:
-            print "Sex switched..."
+            log("Sex switched...")
             # button 1 switched
             self.set_ziel_geschlecht(value_mask)
         elif interrupt_mask == 2:
-            print "Insult button pressed..."
+            log("Insult button pressed...")
             button_up = value_mask&2
-            print "value_mask =" + str(button_up)
+            log("value_mask =" + str(button_up))
             if button_up == 2:
                 self.insult()
-        print "io_switch() end"
+        log("io_switch() end")
 
     def set_ziel_geschlecht(self, value_mask):
         is_on = value_mask^14
         if is_on:
-            print "MALE"
+            log("sex was set to MALE")
             self.female = False
         else:
-            print "FEMALE"
+            log("sex was set to FEMALE")
             self.female = True
 
 
     def register_callbacks(self):
-        print "Registering callback to motion detector..."
+        log("Registering callback to motion detector...")
         self.motion.register_callback(self.motion.CALLBACK_MOTION_DETECTED, self.motion_detected)
         self.motion.register_callback(self.motion.CALLBACK_DETECTION_CYCLE_ENDED, self.motion_cycle_ended)
         self.io.set_debounce_period(1000)
@@ -92,7 +96,7 @@ class PiTinkerforgeStack:
         # Enable interrupt on pin 0
         self.io.set_interrupt((1 << 0) | (1 << 1))
         #self.io.set_interrupt(1 << 1)
-        print "register done"
+        log("register done")
 
 
 if __name__ == "__main__":
