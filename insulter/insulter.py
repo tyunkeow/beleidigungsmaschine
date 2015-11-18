@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # insulter.py
 
+import os
 import json
 import random
 import syslog
@@ -12,7 +13,7 @@ class Insulter:
 
     def __init__(self):
         syslog.openlog("insultr")
-        with open('insult_db.json') as json_data:
+        with open(os.path.dirname(os.path.abspath(__file__)) + '/insult_db.json') as json_data:
             self.ins_data = json.load(json_data)
             json_data.close()
             #pprint(d)
