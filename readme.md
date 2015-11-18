@@ -12,15 +12,18 @@ synthesis tools on a mac. This can be used to generate your own insults.
 Hardware
 ========
 
+You will need the following components:
+
 * Raspberry Pi
 * SD Card
 * https://www.tinkerforge.com/de/shop/bricks/master-brick.html
 * https://www.tinkerforge.com/de/shop/bricklets/io4-bricklet.html
 * https://www.tinkerforge.com/de/shop/power-supplies/step-down-power-supply.html
-* https://www.tinkerforge.com/de/shop/bricklets/human-input/rotary-poti-bricklet.html (2x)
-* https://www.tinkerforge.com/de/shop/bricklets/human-input/motion-detector-bricklet.html  
+* (optional) https://www.tinkerforge.com/de/shop/bricklets/human-input/rotary-poti-bricklet.html (2x)
+* (optional) https://www.tinkerforge.com/de/shop/bricklets/human-input/motion-detector-bricklet.html  
 * Power Supply 5V
 * Speaker
+* some kind of case for fixing the components. I've used [makerbeam](http://www.makerbeam.com).
  
 
 Installation
