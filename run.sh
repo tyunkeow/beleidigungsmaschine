@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "Stopping existing docker containers..."
+docker stop insulter
+docker stop brickd
+
 echo "Removing existing docker containers..."
 docker rm brickd
 docker rm insulter
