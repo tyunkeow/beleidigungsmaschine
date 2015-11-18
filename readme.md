@@ -31,7 +31,7 @@ Installation
 * Start Pi with the SD card and login as root
 * if you use a usb sound device:
 ** edit `/etc/modprobe.d/alsa-base.conf: options snd-usb-audio index=-2 ---> 0
-* `git clone git://github.com/tyunkeow/beleidigungsmaschine.git`
+* `git clone https://github.com/tyunkeow/beleidigungsmaschine.git`
 * `cd beleidigungsmaschine`
 * `./build.sh`
 * `./run.sh`
