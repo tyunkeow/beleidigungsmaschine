@@ -3,7 +3,6 @@ from tinkerforge.brick_master import Master
 from tinkerforge.bricklet_motion_detector import MotionDetector
 from tinkerforge.bricklet_rotary_poti import RotaryPoti
 from tinkerforge.bricklet_io4 import IO4
-#from insulter import speak_next_insult
 from text2sound import play_sound, AUDIO_DIR
 from time import sleep
 import sys
@@ -86,7 +85,7 @@ class PiTinkerforgeStack:
 
     def register_callbacks(self):
         print "Registering callback to motion detector..."
-        #self.motion.register_callback(self.motion.CALLBACK_MOTION_DETECTED, self.motion_detected)
+        self.motion.register_callback(self.motion.CALLBACK_MOTION_DETECTED, self.motion_detected)
         self.motion.register_callback(self.motion.CALLBACK_DETECTION_CYCLE_ENDED, self.motion_cycle_ended)
         self.io.set_debounce_period(1000)
         self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
