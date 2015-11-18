@@ -12,6 +12,8 @@ ADD ./data/audio/m/* ${AUDIO}/m/
 
 ADD ./data/audio/f/* ${AUDIO}/f/
 
+ADD ./data/audio/hello.aiff ${AUDIO}/hello.aiff
+
 RUN apt-get update && apt-get install -y \
     alsa \
     sox
