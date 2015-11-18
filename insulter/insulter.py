@@ -55,7 +55,7 @@ class Insulter:
         else:
             max = 1344
         fn = FILENAME_PATTERN.format(ziel_geschlecht, random.randint(0, max))
-        log("speaking insult " + str(fn))
+        self.log("speaking insult " + str(fn))
         play_sound(fn, control*4, 1+((speed)/200.0))
 
 
