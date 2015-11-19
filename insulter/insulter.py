@@ -12,7 +12,7 @@ FILENAME_PATTERN = AUDIO_DIR + '{}/insult{}.aiff'
 class Insulter:
 
     def __init__(self):
-        syslog.openlog("insultr")
+        syslog.openlog('insultr', 0, syslog.LOG_LOCAL4)
         with open(os.path.dirname(os.path.abspath(__file__)) + '/insult_db.json') as json_data:
             self.ins_data = json.load(json_data)
             json_data.close()

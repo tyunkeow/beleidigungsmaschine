@@ -23,7 +23,7 @@ class PiTinkerforgeStack:
     female = False
 
     def __init__(self):
-        syslog.openlog("insultr-tf")
+        syslog.openlog('insultr-tf', 0, syslog.LOG_LOCAL4)
         self.con = IPConnection()
         self.master = Master(self.uid_master, self.con)
         self.motion = MotionDetector(self.uid_motion, self.con)
