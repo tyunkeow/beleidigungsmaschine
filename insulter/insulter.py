@@ -5,11 +5,10 @@ import os
 import json
 import random
 import syslog
-from text2sound import play_sound, text2soundfile
+from text2sound import play_sound, text2soundfile, AUDIO_DB_DIR
 
 #AUDIO_DIR = '/data/audio/'
 MY_DIR = os.path.dirname(os.path.abspath(__file__))
-AUDIO_DB_DIR = os.getenv('AUDIO', MY_DIR + "/audio_db")
 AUDIO_DB_FILE = AUDIO_DB_DIR + "/insult_db.json"
 AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = AUDIO_DB_DIR + "/insult_db_index_zielgeschlecht.json"
 FILENAME_PATTERN = AUDIO_DB_DIR + '/insult{}.aiff'
