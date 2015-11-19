@@ -10,15 +10,11 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install tinkerforge
 
-
 ENV HOME /insulter/
 
 ENV AUDIO_DB /insulter/audio_db/
 
-ADD ./audio_db/* ${AUDIO}/
-
-#ADD ./data/audio/f/* ${AUDIO}/f/
-#ADD ./data/audio/hello.aiff ${AUDIO}/hello.aiff
+ADD ./audio_db/* ${AUDIO_DB}/
 
 ADD *.py $HOME
 
