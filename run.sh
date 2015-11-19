@@ -1,14 +1,14 @@
 #!/bin/bash
 
 echo "Stopping existing docker containers..."
-docker stop syslog
 docker stop insulter
 docker stop brickd
+docker stop syslog
 
 echo "Removing existing docker containers..."
-docker rm syslog
-docker rm brickd
 docker rm insulter
+docker rm brickd
+docker rm syslog
 
 echo "Starting docker containers..."
 # start syslog daemon container

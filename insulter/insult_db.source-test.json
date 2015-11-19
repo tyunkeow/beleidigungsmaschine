@@ -1,0 +1,42 @@
+{
+    "adjektive": [
+        {
+            "m": "haesslicher",
+            "f": "haessliche",
+            "n": "haessliches"
+        }
+    ],
+    "steigerungen": ["sehr", "massiv"],
+    "substantive": [
+        {
+            "geschlecht": "m",
+            "wert": "Affe",
+            "ziel": "m"
+        },
+        {
+            "geschlecht": "f",
+            "wert": "Geissel der Menschheit",
+            "ziel": "m"
+        },
+        {
+            "geschlecht": "f",
+            "wert": "Geissel der Menschheit",
+            "ziel": "f"
+        },
+        {
+            "geschlecht": "m",
+            "wert": "Fuerst der Finsternis",
+            "ziel": "m"
+        },
+        {
+            "geschlecht": "f",
+            "wert": "Fuerstin der Finsternis",
+            "ziel": "f"
+        },
+        {
+            "geschlecht": "n",
+            "wert": "Stinktier",
+            "ziel": "m"
+        }
+    ]
+}

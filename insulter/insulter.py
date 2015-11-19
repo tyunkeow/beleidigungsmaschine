@@ -5,41 +5,31 @@ import os
 import json
 import random
 import syslog
-from text2sound import play_sound, text2soundfile, AUDIO_DIR
+from text2sound import play_sound, text2soundfile
 
-FILENAME_PATTERN = AUDIO_DIR + '{}/insult{}.aiff'
+#AUDIO_DIR = '/data/audio/'
+MY_DIR = os.path.dirname(os.path.abspath(__file__))
+AUDIO_DB_DIR = os.getenv('AUDIO', MY_DIR + "/audio_db")
+AUDIO_DB_FILE = AUDIO_DB_DIR + "/insult_db.json"
+AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = AUDIO_DB_DIR + "/insult_db_index_zielgeschlecht.json"
+FILENAME_PATTERN = AUDIO_DB_DIR + '/insult{}.aiff'
 
 class Insulter:
 
     def __init__(self):
         syslog.openlog('insultr', 0, syslog.LOG_LOCAL4)
-        with open(os.path.dirname(os.path.abspath(__file__)) + '/insult_db.json') as json_data:
-            self.ins_data = json.load(json_data)
-            json_data.close()
-            #pprint(d)
+        if os.path.exists(AUDIO_DB_FILE): 
+            with open(AUDIO_DB_FILE) as json_data:
+                self.ins_data = json.load(json_data)
+                json_data.close()
+        if os.path.exists(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT): 
+            with open(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT) as json_data:
+                self.zielgeschlecht2Id = json.load(json_data)
+                json_data.close()
 
     def pickRandom(self, list):
         idx = random.randint(0, len(list) - 1)
         return list[idx], idx 
-
-
-    def pickAdjektiv(self, g, idx):
-        arr = self.ins_data['adjektive']
-        rnd = random.randint(0, len(arr) - 1)
-        return arr[rnd][g]
-
-
-    def pickSubstantiv(self, idx):
-        arr = self.ins_data['substantive']
-        if idx < 0:
-            rnd = random.randint(0, len(arr) - 1)
-        return (arr[rnd]['wert'], arr[rnd]['geschlecht'])
-
-
-    def pickSteigerung(self, g, idx):
-        arr = self.ins_data['steigerungen']
-        rnd = random.randint(0, len(arr) - 1)
-        return arr[rnd]
 
 
     def get_insult(self, idx_steig, idx_adj, idx_sub):
@@ -47,49 +37,88 @@ class Insulter:
         return "Du " + self.pickSteigerung(g, idx_steig) + " " + self.pickAdjektiv(g, idx_adj) + " " + subst
 
 
-    def speak_next_insult(self, ziel_geschlecht, control=0, speed=0):
+    def speak_next_insult(self, zielgeschlecht, control=0, speed=0):
 
-        #max = len(ins_data['steigerungen']) * len(ins_data['adjektive']) * len(ins_data['substantive'])
-        max = 0
-        if ziel_geschlecht == 'm':
-            max = 2304
-        else:
-            max = 1344
-        fn = FILENAME_PATTERN.format(ziel_geschlecht, random.randint(0, max))
-        self.log("speaking insult " + str(fn))
-        play_sound(fn, control*4, 1+((speed)/200.0))
+        id, idx = self.pickRandom(self.zielgeschlecht2Id[zielgeschlecht])
+        insult = self.ins_data[str(id)]
+
+        self.log("speaking insult {} from file {}...".format(insult['text'], insult['filename']))
+        play_sound(insult['filename'], control*4, 1+((speed)/200.0))
 
 
     def create_insult_audio_db(self):
+        with open(MY_DIR + '/insult_db.source.json') as json_data:
+            insult_db_source = json.load(json_data)
+            json_data.close()
+            #pprint(d)
+
+        if not os.path.isdir(AUDIO_DB_DIR):
+            os.makedirs(AUDIO_DB_DIR)
+
+        insult_db = {}
+        insult_db_index_zielgeschlecht = {}
+        insult_db_index_zielgeschlecht['m'] = []
+        insult_db_index_zielgeschlecht['f'] = []
+
+        #female = True
+        count = 0
         male_count = 0
         female_count = 0
-        for steig in self.ins_data['steigerungen']:
-            for adj in self.ins_data['adjektive']:
-                for subs in self.ins_data['substantive']:
-                    g = subs['geschlecht']
-                    substantiv = subs['wert']
-                    ziel = subs['ziel'] # zielgeschlecht - f oder m
-                    if ziel == "m":
+        for steig in insult_db_source['steigerungen']:
+            for adj in insult_db_source['adjektive']:
+                for subst in insult_db_source['substantive']:
+
+                    grammatik_geschlecht = subst['geschlecht']
+                    substantiv = subst['wert']
+                    zielgeschlecht = subst['ziel'] # zielgeschlecht - f oder m
+                    adjektiv = adj[grammatik_geschlecht]
+                    steigerung = steig
+
+                    text = "Du {} {} {}".format(steigerung, adjektiv, substantiv)
+                    filename = FILENAME_PATTERN.format(count)
+                    
+                    if zielgeschlecht == "m":
                         male_count += 1
-                        filename = FILENAME_PATTERN.format(ziel, male_count)
+                        female = False
+                        insult_db_index_zielgeschlecht['m'].append(count)
                     else: 
                         female_count += 1
-                        filename = FILENAME_PATTERN.format(ziel, female_count)
+                        female = True
+                        insult_db_index_zielgeschlecht['f'].append(count)
+                    
+                    print "female_count:{}, male_count:{}, female:{}".format(female_count, male_count, female)
+                    
+                    insult_db[count] = { 
+                        'steigerung': steigerung, 
+                        'adjektiv': adjektiv,
+                        'substantiv': substantiv,
+                        'zielgeschlecht': zielgeschlecht,
+                        'filename': filename,
+                        'text': text
+                    }
 
-                    adjektiv = adj[g]
-                    steigerung = steig
-                    text = "Du {} {} {}".format(steigerung, adjektiv, substantiv)
-                    #log "Writing {} to {}".format(text, filename)
-                    text2soundfile(text, filename)
+                    text2soundfile(text, filename, overwrite=True, female=female)
+                    #print json.dumps(insult_db, indent=4)
+                    count += 1
+
+        insult_db['female_count'] = female_count
+        insult_db['male_count'] = male_count
+
+        out_file = open(AUDIO_DB_FILE,"w")
+        json.dump(insult_db, out_file, indent=4)    
+        out_file.close()
+
+        out_file = open(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT,"w")
+        json.dump(insult_db_index_zielgeschlecht, out_file, indent=4)    
+        out_file.close()
 
     def log(self, msg):
         syslog.syslog(msg)
 
 if __name__ == "__main__":
     insulter = Insulter()
-    #create_insult_audio_db()
+    #insulter.create_insult_audio_db()
 
-    insult = insulter.get_insult(-1, -1, -1)
-    print insult
     insulter.speak_next_insult("m")
+    insulter.speak_next_insult("f")
 
