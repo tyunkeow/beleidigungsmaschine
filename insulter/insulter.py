@@ -118,6 +118,7 @@ class Insulter:
         play_sound(AUDIO_DB_DIR + "/hello.aiff")
 
     def log(self, msg):
+        print msg
         syslog.syslog(msg)
 
 if __name__ == "__main__":
