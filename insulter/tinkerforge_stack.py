@@ -3,10 +3,10 @@ from tinkerforge.brick_master import Master
 from tinkerforge.bricklet_motion_detector import MotionDetector
 from tinkerforge.bricklet_rotary_poti import RotaryPoti
 from tinkerforge.bricklet_io4 import IO4
-from text2sound import play_sound, AUDIO_DB_DIR
+from text2sound import play_sound
 from time import sleep
 import sys
-from insulter import Insulter
+from insulter import Insulter, AUDIO_DB_DIR
 import syslog
 
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     print "Poti left position  : ", stack.poti_left.get_position()
     print "Poti right position : ", stack.poti_right.get_position()
     stack.register_callbacks()
-    play_sound(AUDIO_DB_DIR + "/hello.aiff")
+    stack.insulter.sayHello()
 
     sleep(1000000)
     input('Press key to exit\n')
