@@ -7,25 +7,27 @@ import random
 import syslog
 from text2sound import play_sound, text2soundfile
 
-MY_DIR = os.path.dirname(os.path.abspath(__file__))
-AUDIO_DB_DIR = os.getenv('AUDIO_DB_DIR', MY_DIR + "/audio_db")
-AUDIO_DB_FILE = AUDIO_DB_DIR + "/insult_db.json"
-AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = AUDIO_DB_DIR + "/insult_db_index_zielgeschlecht.json"
-FILENAME_PATTERN = AUDIO_DB_DIR + '/insult{}.aiff'
+
 
 class Insulter:
 
     def __init__(self):
-        syslog.openlog('insultr', 0, syslog.LOG_LOCAL4)
-        print "MY_DIR={}".format(MY_DIR)
-        print "AUDIO_DB_DIR={}".format(AUDIO_DB_DIR)
+        self.MY_DIR = os.path.dirname(os.path.abspath(__file__))
+        self.AUDIO_DB_DIR = os.getenv('AUDIO_DB_DIR', self.MY_DIR + "/audio_db")
+        self.AUDIO_DB_FILE = self.AUDIO_DB_DIR + "/insult_db.json"
+        self.AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = self.AUDIO_DB_DIR + "/insult_db_index_zielgeschlecht.json"
+        self.FILENAME_PATTERN = self.AUDIO_DB_DIR + '/insult{}.aiff'
 
-        if os.path.exists(AUDIO_DB_FILE): 
-            with open(AUDIO_DB_FILE) as json_data:
+        syslog.openlog('insultr', 0, syslog.LOG_LOCAL4)
+        print "MY_DIR={}".format(self.MY_DIR)
+        print "AUDIO_DB_DIR={}".format(self.AUDIO_DB_DIR)
+
+        if os.path.exists(self.AUDIO_DB_FILE): 
+            with open(self.AUDIO_DB_FILE) as json_data:
                 self.ins_data = json.load(json_data)
                 json_data.close()
-        if os.path.exists(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT): 
-            with open(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT) as json_data:
+        if os.path.exists(self.AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT): 
+            with open(self.AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT) as json_data:
                 self.zielgeschlecht2Id = json.load(json_data)
                 json_data.close()
 
@@ -54,8 +56,8 @@ class Insulter:
             json_data.close()
             #pprint(d)
 
-        if not os.path.isdir(AUDIO_DB_DIR):
-            os.makedirs(AUDIO_DB_DIR)
+        if not os.path.isdir(self.AUDIO_DB_DIR):
+            os.makedirs(self.AUDIO_DB_DIR)
 
         insult_db = {}
         insult_db_index_zielgeschlecht = {}
@@ -77,7 +79,7 @@ class Insulter:
                     steigerung = steig
 
                     text = "Du {} {} {}".format(steigerung, adjektiv, substantiv)
-                    filename = FILENAME_PATTERN.format(count)
+                    filename = self.FILENAME_PATTERN.format(count)
                     
                     if zielgeschlecht == "m":
                         male_count += 1
@@ -106,16 +108,16 @@ class Insulter:
         insult_db['female_count'] = female_count
         insult_db['male_count'] = male_count
 
-        out_file = open(AUDIO_DB_FILE,"w")
+        out_file = open(self.AUDIO_DB_FILE,"w")
         json.dump(insult_db, out_file, indent=4)    
         out_file.close()
 
-        out_file = open(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT,"w")
+        out_file = open(self.AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT,"w")
         json.dump(insult_db_index_zielgeschlecht, out_file, indent=4)    
         out_file.close()
 
     def say_hello(self):
-        play_sound(AUDIO_DB_DIR + "/hello.aiff")
+        play_sound(self.AUDIO_DB_DIR + "/hello.aiff")
 
     def log(self, msg):
         print msg

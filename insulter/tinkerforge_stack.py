@@ -6,7 +6,7 @@ from tinkerforge.bricklet_io4 import IO4
 from text2sound import play_sound
 from time import sleep
 import sys
-from insulter import Insulter, AUDIO_DB_DIR
+from insulter import Insulter
 import syslog
 
 
