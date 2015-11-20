@@ -8,7 +8,7 @@ DEFAULT_VOLUME = 50
 DEFAULT_SPEED = 1
 
 MY_DIR = os.path.dirname(os.path.abspath(__file__))
-AUDIO_DB_DIR = os.getenv('AUDIO', MY_DIR + "/audio_db")
+AUDIO_DB_DIR = os.getenv('AUDIO_DB_DIR', MY_DIR + "/audio_db")
 
 def text2soundfile(text, filename, overwrite=False, female=True):
     filename = os.path.expanduser(filename)

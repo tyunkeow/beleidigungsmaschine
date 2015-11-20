@@ -12,9 +12,9 @@ RUN pip install tinkerforge
 
 ENV HOME /insulter/
 
-ENV AUDIO_DB /insulter/audio_db/
+ENV AUDIO_DB_DIR /insulter/audio_db/
 
-ADD ./audio_db/* ${AUDIO_DB}/
+ADD ./audio_db/* ${AUDIO_DB_DIR}/
 
 ADD *.py $HOME
 
