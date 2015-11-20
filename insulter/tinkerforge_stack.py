@@ -107,7 +107,7 @@ if __name__ == "__main__":
     print "Poti left position  : ", stack.poti_left.get_position()
     print "Poti right position : ", stack.poti_right.get_position()
     stack.register_callbacks()
-    stack.insulter.sayHello()
+    stack.insulter.say_hello()
 
     sleep(1000000)
     input('Press key to exit\n')

@@ -114,6 +114,9 @@ class Insulter:
         json.dump(insult_db_index_zielgeschlecht, out_file, indent=4)    
         out_file.close()
 
+    def say_hello(self):
+        play_sound(AUDIO_DB_DIR + "/hello.aiff")
+
     def log(self, msg):
         syslog.syslog(msg)
 
