@@ -7,8 +7,8 @@ import random
 
 MY_DIR = os.path.dirname(os.path.abspath(__file__))
 AUDIO_DB_DIR = os.getenv('AUDIO_DB_DIR', MY_DIR + "/audio")
-AUDIO_DB_FILE = AUDIO_DB_DIR + "/insult_db.json"
-AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = AUDIO_DB_DIR + "/insult_db_index_zielgeschlecht.json"
+AUDIO_DB_FILE = MY_DIR + "/insult_db.json"
+AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = MY_DIR + "/insult_db_index_zielgeschlecht.json"
 FILENAME_PATTERN = '/insult{}.aiff'
 
 def text2soundfile(text, filename, overwrite=False, female=True):
@@ -31,15 +31,6 @@ class InsultDBFactory:
     def __init__(self):
         print "MY_DIR={}".format(MY_DIR)
         print "AUDIO_DB_DIR={}".format(AUDIO_DB_DIR)
-
-        if os.path.exists(AUDIO_DB_FILE): 
-            with open(AUDIO_DB_FILE) as json_data:
-                self.ins_data = json.load(json_data)
-                json_data.close()
-        if os.path.exists(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT): 
-            with open(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT) as json_data:
-                self.zielgeschlecht2Id = json.load(json_data)
-                json_data.close()
 
     def pickRandom(self, list):
         idx = random.randint(0, len(list) - 1)
