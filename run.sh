@@ -14,10 +14,11 @@ echo "Starting docker containers..."
 # start syslog daemon container
 docker run -d --privileged --name syslog -v /tmp/syslogdev:/dev syslog
 docker run -d --privileged --name brickd tinkerforge_brickd
-docker run -d --privileged --name insulter --link brickd:brickd insulter
+docker run -d --privileged --name insulter --link brickd:brickd -v ./insulter/audio_db:/insulter/audio_db insulter
 docker ps -a
 
 echo "The following files were bound to the host:"
 docker inspect -f {{.Volumes}} syslog
+docker inspect -f {{.Volumes}} insulter
 
 echo "done."
