@@ -5,15 +5,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 echo "This script is located at $SCRIPTPATH"
 
-echo "Stopping existing docker containers..."
-docker stop insultr
-docker stop brickd
-docker stop syslog
-
-echo "Removing existing docker containers..."
-docker rm insultr
-docker rm brickd
-docker rm syslog
+stop.sh
 
 echo "Starting docker containers..."
 # start syslog daemon container
