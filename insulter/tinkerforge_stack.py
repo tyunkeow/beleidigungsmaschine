@@ -3,10 +3,9 @@ from tinkerforge.brick_master import Master
 from tinkerforge.bricklet_motion_detector import MotionDetector
 from tinkerforge.bricklet_rotary_poti import RotaryPoti
 from tinkerforge.bricklet_io4 import IO4
-from text2sound import play_sound
 from time import sleep
 import sys
-from insulter import Insulter
+from insultr import Insultr
 import syslog
 
 
@@ -30,7 +29,7 @@ class PiTinkerforgeStack:
         self.poti_left = RotaryPoti(self.uid_poti_left, self.con)
         self.poti_right = RotaryPoti(self.uid_poti_right, self.con)
         self.io = IO4(self.uid_io, self.con)
-        self.insulter = Insulter()
+        self.insultr = Insultr()
         self.log("---" + str(15^15))
         self.log("---" + str(15^14))
 
@@ -54,7 +53,7 @@ class PiTinkerforgeStack:
         ziel_geschlecht = "m"
         if self.female:
             ziel_geschlecht = "f"
-        self.insulter.speak_next_insult(ziel_geschlecht, self.poti_left.get_position(), self.poti_right.get_position())
+        self.insultr.speak_next_insult(ziel_geschlecht, self.poti_left.get_position(), self.poti_right.get_position())
 
     def motion_cycle_ended(self):
         self.log("READY for motion detection!")
@@ -107,7 +106,7 @@ if __name__ == "__main__":
     print "Poti left position  : ", stack.poti_left.get_position()
     print "Poti right position : ", stack.poti_right.get_position()
     stack.register_callbacks()
-    stack.insulter.say_hello()
+    stack.insultr.say_hello()
 
     sleep(1000000)
     input('Press key to exit\n')

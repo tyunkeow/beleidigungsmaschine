@@ -21,7 +21,7 @@ def play_sound(filename, pitch=0, tempo=1):
     print "cmd:", cmd
     os.system(cmd)
 
-class Insulter:
+class Insultr:
 
     def __init__(self):
 
@@ -66,9 +66,9 @@ class Insulter:
         syslog.syslog(msg)
 
 if __name__ == "__main__":
-    insulter = Insulter()
+    insultr = Insultr()
     #insulter.create_insult_audio_db()
 
-    insulter.speak_next_insult("m")
-    insulter.speak_next_insult("f")
+    insultr.speak_next_insult("m")
+    insultr.speak_next_insult("f")
 

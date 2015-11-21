@@ -1,3 +1,3 @@
-import text2sound
-import insulter
+import insultr
+import tinkerforge_stack
 

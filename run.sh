@@ -18,7 +18,7 @@ docker rm syslog
 echo "Starting docker containers..."
 # start syslog daemon container
 docker run -d --privileged --name syslog -v /tmp/syslogdev:/dev syslog
-docker run -d --privileged --name brickd tinkerforge_brickd
+docker run -d --privileged --name brickd tinkerforge-brickd
 docker run -d --privileged --name insultr --link brickd:brickd -v "${SCRIPTPATH}/insult_db/:/insulter/insult_db" insultr
 docker ps -a
 

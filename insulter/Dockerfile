@@ -10,11 +10,11 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install tinkerforge
 
-ENV HOME /insulter/
+ENV HOME /insultr/
 
-VOLUME /insulter/insult_db/
+VOLUME /insultr/insult_db/
 
-ENV AUDIO_DB_DIR /insulter/insult_db/
+ENV AUDIO_DB_DIR /insultr/insult_db/
 
 ADD *.py $HOME
 
