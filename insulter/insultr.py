@@ -29,12 +29,12 @@ class Insultr:
         print "MY_DIR={}".format(MY_DIR)
         print "AUDIO_DB_DIR={}".format(AUDIO_DB_DIR)
 
-        log("Opening {} ...".format(AUDIO_DB_FILE))
+        self.log("Opening {} ...".format(AUDIO_DB_FILE))
         with open(AUDIO_DB_FILE) as json_data:
             self.ins_data = json.load(json_data)
             json_data.close()
         
-        log("Opening {} ...".format(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT))
+        self.log("Opening {} ...".format(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT))
         with open(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT) as json_data:
             self.zielgeschlecht2Id = json.load(json_data)
             json_data.close()
