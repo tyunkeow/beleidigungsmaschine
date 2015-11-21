@@ -20,8 +20,6 @@ ADD *.py $HOME
 
 ADD *.sh $HOME
 
-ADD *.json $HOME
-
 WORKDIR ${HOME}
 
 #CMD ["python", "tinkerforge_stack.py"]
