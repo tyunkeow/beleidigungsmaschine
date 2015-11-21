@@ -23,4 +23,4 @@ ADD *.sh $HOME
 WORKDIR ${HOME}
 
 #CMD ["python", "tinkerforge_stack.py"]
-CMD ["./run_insulter.sh"]
+CMD ["./run_insultr.sh"]
