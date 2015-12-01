@@ -10,40 +10,85 @@ import syslog
 
 
 class PiTinkerforgeStack:
-    #host = '192.168.178.27' #raspi
+    host = '192.168.178.36' #raspi
     #host = '127.0.0.1' #localhost
-    host = 'brickd'
+    #host = 'brickd'
     port = 4223
-    uid_master = '6JKxCC'
-    uid_motion = 'oRL'
-    uid_poti_left = 'ejC'
-    uid_poti_right = 'ejm'
-    uid_io = 'hcs'
+    #uid_master = '6JKxCC'
+    #uid_motion = 'oRL'
+    #uid_poti_left = 'ejC'
+    #uid_poti_right = 'ejm'
+    #uid_io = 'hcs'
     female = False
 
     def __init__(self):
         syslog.openlog('insultr-tf', 0, syslog.LOG_LOCAL4)
+
+        self.poti_left = None
+        self.poti_right = None
+        self.io =None
+
         self.con = IPConnection()
-        self.master = Master(self.uid_master, self.con)
-        self.motion = MotionDetector(self.uid_motion, self.con)
-        self.poti_left = RotaryPoti(self.uid_poti_left, self.con)
-        self.poti_right = RotaryPoti(self.uid_poti_right, self.con)
-        self.io = IO4(self.uid_io, self.con)
+
+        # Register IP Connection callbacks
+        self.con.register_callback(IPConnection.CALLBACK_ENUMERATE, 
+                                     self.cb_enumerate)
+        self.con.register_callback(IPConnection.CALLBACK_CONNECTED, 
+                                     self.cb_connected)
+
+        #self.master = Master(self.uid_master, self.con)
+        #self.motion = MotionDetector(self.uid_motion, self.con)
+        #self.poti_left = RotaryPoti(self.uid_poti_left, self.con)
+        #self.poti_right = RotaryPoti(self.uid_poti_right, self.con)
+        #self.io = IO4(self.uid_io, self.con)
+        
         self.insultr = Insultr()
         self.log("---" + str(15^15))
         self.log("---" + str(15^14))
 
     def log(self, msg):
         syslog.syslog(msg)
+        print msg
 
     def connect(self):
         self.log("Connecting to host " + self.host + " on port " + str(self.port))
         self.con.connect(self.host, self.port)
-        self.set_ziel_geschlecht(self.io.get_value())
+        self.con.enumerate()
 
     def disconnect(self):
         self.log("Disconnecting from host " + self.host)
         self.con.disconnect()
+
+    # Callback handles device connections and configures possibly lost 
+    # configuration of lcd and temperature callbacks, backlight etc.
+    def cb_enumerate(self, uid, connected_uid, position, hardware_version, 
+                     firmware_version, device_identifier, enumeration_type):
+        if enumeration_type == IPConnection.ENUMERATION_TYPE_CONNECTED or \
+           enumeration_type == IPConnection.ENUMERATION_TYPE_AVAILABLE:
+            
+            # Enumeration is for LCD Bricklet
+            if device_identifier == IO4.DEVICE_IDENTIFIER:
+                # Create IO4 device object
+                self.io = IO4(uid, self.con) 
+                self.io.set_debounce_period(1000)
+                self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
+                # Enable interrupt on pin 0
+                self.io.set_interrupt((1 << 0) | (1 << 1))
+                #self.io.set_interrupt(1 << 1)
+                self.set_ziel_geschlecht(self.io.get_value())
+
+            # Enumeration is for Temperature Bricklet
+            if device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
+                # Create RotaryPoti device object
+                self.poti_right = RotaryPoti(uid, self.con) 
+
+
+    # Callback handles reconnection of IP Connection
+    def cb_connected(self, connected_reason):
+        # Enumerate devices again. If we reconnected, the Bricks/Bricklets
+        # may have been offline and the configuration may be lost.
+        # In this case we don't care for the reason of the connection
+        self.con.enumerate()    
 
     def motion_detected(self):
         self.log("CALLBACK!!")
@@ -53,7 +98,16 @@ class PiTinkerforgeStack:
         ziel_geschlecht = "m"
         if self.female:
             ziel_geschlecht = "f"
-        self.insultr.speak_next_insult(ziel_geschlecht, self.poti_left.get_position(), self.poti_right.get_position())
+
+        control = 0 
+        if self.poti_left:
+            control = self.poti_left.get_position()
+
+        speed = 0
+        if self.poti_right:
+            speed = self.poti_right.get_position()
+
+        self.insultr.speak_next_insult(ziel_geschlecht, control=control, speed=speed)
 
     def motion_cycle_ended(self):
         self.log("READY for motion detection!")
@@ -101,11 +155,11 @@ class PiTinkerforgeStack:
 if __name__ == "__main__":
     stack = PiTinkerforgeStack()
     stack.connect()
-    #print "Distance Infrared 1         : {} cm".format(stack.distance_ir_1.get_distance()/10)
-    #print "MultiTouch electrode config : ", stack.multi_touch_1.get_electrode_config()
-    print "Poti left position  : ", stack.poti_left.get_position()
-    print "Poti right position : ", stack.poti_right.get_position()
-    stack.register_callbacks()
+    if stack.poti_left:
+        print "Poti left position  : ", stack.poti_left.get_position()
+    if stack.poti_right:
+        print "Poti right position : ", stack.poti_right.get_position()
+    #stack.register_callbacks()
     stack.insultr.say_hello()
 
     sleep(1000000)
