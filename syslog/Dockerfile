@@ -14,4 +14,4 @@ VOLUME /dev
 
 VOLUME /var/log
 
-ADD rsyslog-insultr.conf /etc/rsyslog.d/rsyslog-insultr.conf
+ADD rsyslog-insultr.conf /etc/rsyslog.conf
