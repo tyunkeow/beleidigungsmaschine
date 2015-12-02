@@ -15,7 +15,7 @@ docker run -d --privileged --name insultr -v /tmp/syslogdev/log:/dev/log --link 
 docker ps -a
 
 echo "The following files were bound to the host:"
-docker inspect -f {{.Volumes}} syslog
-docker inspect -f {{.Volumes}} insultr
+docker inspect -f {{.Mounts}} syslog
+docker inspect -f {{.Mounts}} insultr
 
 echo "done."
