@@ -17,10 +17,13 @@ RUN apt-get install -y --no-install-recommends \
 
 RUN mkdir /root/.ssh/
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
-RUN git clone https://github.com/abrasive/shairport.git
-RUN cd shairport
-RUN ./configure
-RUN make
-RUN sudo make install
-RUN cd scripts/debian/
-RUN sudo cp -r * /etc/
+RUN git clone https://github.com/abrasive/shairport.git && \
+    cd shairport && \
+    ./configure && \
+    make && make install 
+
+COPY airplay.sh /usr/bin/
+#RUN cd scripts/debian/
+#RUN sudo cp -r * /etc/
+
+ENTRYPOINT ["airplay.sh"]
