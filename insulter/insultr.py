@@ -22,6 +22,11 @@ def play_sound(filename, pitch=0, tempo=1):
     os.system(cmd)
 
 class Insultr:
+    ins_data = None
+    zielgeschlecht2Id = None
+    last_substantiv = None
+    last_adjektiv = None
+    last_steigerung = None
 
     def __init__(self):
 
@@ -43,16 +48,18 @@ class Insultr:
         idx = random.randint(0, len(list) - 1)
         return list[idx], idx 
 
-
-    def get_insult(self, idx_steig, idx_adj, idx_sub):
-        subst, g = self.pickSubstantiv(idx_sub)
-        return "Du " + self.pickSteigerung(g, idx_steig) + " " + self.pickAdjektiv(g, idx_adj) + " " + subst
-
-
     def speak_next_insult(self, zielgeschlecht, control=0, speed=0):
 
-        id, idx = self.pickRandom(self.zielgeschlecht2Id[zielgeschlecht])
-        insult = self.ins_data[str(id)]
+        # The simplest thing that could possibly work... TODO use a 'real' database
+        while True:
+            id, idx = self.pickRandom(self.zielgeschlecht2Id[zielgeschlecht])
+            insult = self.ins_data[str(id)]
+            if not insult['substantiv'] == self.last_substantiv:
+                break
+
+        self.last_substantiv = insult['substantiv']
+        self.last_adjektiv = insult['adjektiv']
+        self.last_steigerung = insult['steigerung']
 
         self.log("speaking insult {} from file {}...".format(insult['text'], insult['filename']))
         play_sound(AUDIO_DB_DIR + "/audio" + insult['filename'], control*4, 1+((speed)/200.0))
