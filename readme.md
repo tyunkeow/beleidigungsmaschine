@@ -32,14 +32,11 @@ Installation
 *   Download Hypriot SD card image for Raspberry Pi. Contains Raspbian with Docker pre-installed. http://blog.hypriot.com/downloads/
 *   Flash SD Card. http://blog.hypriot.com/getting-started-with-docker-on-your-arm-device/
 *   Start Pi with the SD card and login as root
-*   if you use a usb sound device:
-    `sudo apt-get install alsa-base alsa-utils` needed??
-
-    "Wheezy": edit `/etc/modprobe.d/alsa-base.conf: options snd-usb-audio index=-2 ---> 0
-
-    "Jessie": 
-    find your card number with aplay --list-devices (probably 1)
-    edit /usr/share/alsa/alsa.conf: defaults.ctl.card and defaults.ctl.card must be set to your chosen card (e.g. 1)
+*   Be paranoid: `sudo apt-get dist-upgrade`
+*   If you use a usb sound device:
+    Find your card number with `aplay --list-devices` (probably 1)
+    Adapt Dockerfile in submodule "insulter": 
+    Replace `defaults.ctl.card 1` with apropriate card number
 *   `git clone https://github.com/tyunkeow/beleidigungsmaschine.git`
 *   `cd beleidigungsmaschine`
 *   `./build.sh`

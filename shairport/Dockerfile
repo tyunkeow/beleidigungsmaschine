@@ -27,4 +27,4 @@ COPY airplay.sh /usr/bin/
 #RUN cd scripts/debian/
 #RUN sudo cp -r * /etc/
 
-ENTRYPOINT ["airplay.sh"]
+ENTRYPOINT ["/usr/bin/airplay.sh"]
