@@ -7,6 +7,7 @@ USER root
 RUN apt-get update -q
 RUN apt-get install -y --no-install-recommends \
 	avahi-utils \
+	build-essential \
 	ca-certificates \
 	git-core \
 	libssl-dev \
