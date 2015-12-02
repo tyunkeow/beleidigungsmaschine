@@ -6,7 +6,8 @@ USER root
 
 RUN apt-get update -q
 RUN apt-get install -y --no-install-recommends \
-	alsa \
+	alsa-base \
+	alsa-utils \
 	autoconf \
 	avahi-daemon \
 	avahi-utils \
