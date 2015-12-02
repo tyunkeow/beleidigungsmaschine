@@ -27,4 +27,6 @@ COPY airplay.sh /usr/bin/
 #RUN cd scripts/debian/
 #RUN sudo cp -r * /etc/
 
+ADD shairport /etc/default/
+
 ENTRYPOINT ["/usr/bin/airplay.sh"]
