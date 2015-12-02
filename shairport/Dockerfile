@@ -7,11 +7,13 @@ USER root
 RUN apt-get update -q
 RUN apt-get install -y --no-install-recommends \
 	avahi-utils \
-	git \
+	ca-certificates \
+	git-core \
 	libssl-dev \
 	libao-dev \
 	libpulse-dev \ 
-	libasound2-dev
+	libasound2-dev \
+	ssh
 
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 RUN git clone https://github.com/abrasive/shairport.git
