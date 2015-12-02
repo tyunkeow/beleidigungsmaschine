@@ -13,6 +13,7 @@ RUN apt-get install -y --no-install-recommends \
 	libpulse-dev \ 
 	libasound2-dev
 
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 RUN git clone https://github.com/abrasive/shairport.git
 RUN cd shairport
 RUN ./configure
