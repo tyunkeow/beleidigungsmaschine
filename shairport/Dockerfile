@@ -7,6 +7,7 @@ USER root
 RUN apt-get update -q
 RUN apt-get install -y --no-install-recommends \
 	avahi-utils \
+	git \
 	libssl-dev \
 	libao-dev \
 	libpulse-dev \ 
