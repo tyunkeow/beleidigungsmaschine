@@ -26,6 +26,10 @@ RUN apt-get install -y --no-install-recommends \
 
 RUN mkdir /root/.ssh/
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+RUN apt-get install -y --no-install-recommends \
+	aclocal
+
 RUN git clone https://github.com/mikebrady/shairport-sync.git && \
     cd shairport-sync && \
     autoreconf -i -f && \
