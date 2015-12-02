@@ -6,27 +6,32 @@ USER root
 
 RUN apt-get update -q
 RUN apt-get install -y --no-install-recommends \
+	alsa \
+	autoconf \
+	avahi-daemon \
 	avahi-utils \
 	build-essential \
 	ca-certificates \
+	dbus \
 	git-core \
-	libssl-dev \
-	libao-dev \
-	libpulse-dev \ 
 	libasound2-dev \
-	ssh
+	libavahi-client-dev \
+	libdaemon-dev \
+	libgpg-error0 \
+	libpopt-dev \
+	libssl-dev \ 
+	ssh \
+	supervisor
 
 RUN mkdir /root/.ssh/
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
-RUN git clone https://github.com/abrasive/shairport.git && \
-    cd shairport && \
-    ./configure && \
-    make && make install 
+RUN git clone https://github.com/mikebrady/shairport-sync.git && \
+    cd shairport-sync && \
+    autoreconf -i -f && \
+    ./configure --with-alsa --with-avahi --with-ssl=openssl && \
+    make && \
+    make install 
 
-COPY airplay.sh /usr/bin/
-#RUN cd scripts/debian/
-#RUN sudo cp -r * /etc/
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-ADD shairport /etc/default/
-
-ENTRYPOINT ["/usr/bin/airplay.sh"]
+ENTRYPOINT ["/usr/bin/supervisord"]

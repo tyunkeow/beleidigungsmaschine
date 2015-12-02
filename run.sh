@@ -12,6 +12,7 @@ echo "Starting docker containers..."
 docker run -d --privileged --name syslog -v /tmp/syslogdev:/dev syslog
 docker run -d --privileged -p 4223:4223 --name brickd tinkerforge-brickd
 docker run -d --privileged --name insultr -v /tmp/syslogdev/log:/dev/log --link brickd:brickd -v "${SCRIPTPATH}/insult_db:/insultr/insult_db" insultr
+docker run --name shairport -v /dev/snd:/dev/snd:rw --net="host" --privileged -d shairport
 docker ps -a
 
 echo "The following files were bound to the host:"
