@@ -31,6 +31,9 @@ RUN apt-get install -y --no-install-recommends \
 	autotools-dev \
 	automake
 
+RUN apt-get install -y --no-install-recommends \
+	libconfig-dev
+
 RUN git clone https://github.com/mikebrady/shairport-sync.git && \
     cd shairport-sync && \
     autoreconf -i -f && \
