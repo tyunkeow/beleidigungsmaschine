@@ -37,9 +37,12 @@ RUN apt-get install -y --no-install-recommends \
 RUN git clone https://github.com/mikebrady/shairport-sync.git && \
     cd shairport-sync && \
     autoreconf -i -f && \
-    ./configure --with-alsa --with-avahi --with-ssl=openssl && \
+    ./configure --with-alsa --with-avahi --with-ssl=openssl --with-systemd && \
     make && \
     make install 
+
+RUN apt-get install -y --no-install-recommends \
+	nss-mdns
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
