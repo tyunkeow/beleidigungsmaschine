@@ -10,7 +10,7 @@ MY_DIR = os.path.dirname(os.path.abspath(__file__))
 AUDIO_DB_DIR = os.getenv('AUDIO_DB_DIR', MY_DIR + "/../insult_db")
 AUDIO_DB_FILE = AUDIO_DB_DIR + "/insult_db.json"
 AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = AUDIO_DB_DIR + "/insult_db_index_zielgeschlecht.json"
-FILENAME_PATTERN = '/insult{}.aiff'
+FILENAME_PATTERN = '/insult{}.ogg'
 
 # play audio with SoX
 def play_sound(filename, pitch=0, tempo=1):
