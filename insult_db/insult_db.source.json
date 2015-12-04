@@ -140,7 +140,7 @@
         },
         {
             "geschlecht": "m",
-            "wert": "Luegenbaron",
+            "wert": "Luegenba-rohn",
             "ziel": "m"
         },
         {
@@ -286,6 +286,16 @@
         {
             "geschlecht": "f",
             "wert": "Dumpfbacke",
+            "ziel": "f"
+        },
+        {
+            "geschlecht": "m",
+            "wert": "Arsch",
+            "ziel": "m"
+        },
+        {
+            "geschlecht": "f",
+            "wert": "Kotztuete",
             "ziel": "f"
         },
         {

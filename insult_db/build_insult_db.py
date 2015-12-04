@@ -9,7 +9,7 @@ MY_DIR = os.path.dirname(os.path.abspath(__file__))
 AUDIO_DB_DIR = os.getenv('AUDIO_DB_DIR', MY_DIR + "/audio")
 AUDIO_DB_FILE = MY_DIR + "/insult_db.json"
 AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = MY_DIR + "/insult_db_index_zielgeschlecht.json"
-FILENAME_PATTERN = '/insult{}.aiff'
+FILENAME_PATTERN = '/insult{}'
 
 def text2soundfile(text, filename, overwrite=False, female=True):
     filename = os.path.expanduser(filename)
@@ -17,14 +17,18 @@ def text2soundfile(text, filename, overwrite=False, female=True):
     if not overwrite and file_exists:
         print "Soundfile {} already exists and overwrite flag was not set. Skipping...".format(filename)
     else:
-        text2aiff_mac(text, filename, female)
+        text2ogg_mac(text, filename, female)
 
-def text2aiff_mac(text, filename, female=True):
+def text2ogg_mac(text, filename, female=True):
     print "Writing file {} for sex {} with text {}...".format(filename, female, text)
     if female:
-        os.system('say -v Petra -o {} --file-format=AIFF "{}"'.format(filename, text))
+        #os.system('say -v Petra -o {} --file-format=WAVE "{}"'.format(filename, text))
+        os.system('say -v Petra -o {}.caf --data-format=LEI32@44100 "{}"'.format(filename, text))
+        
     else:
-        os.system('say -v Markus -o {} --file-format=AIFF "{}"'.format(filename, text))
+        #os.system('say -v Markus -o {} --file-format=WAVE "{}"'.format(filename, text))
+        os.system('say -v Markus -o {}.caf --data-format=LEI32@44100 "{}"'.format(filename, text))
+    os.system('sox {}.caf {}.ogg'.format(filename, filename))
 
 class InsultDBFactory:
 
@@ -70,7 +74,7 @@ class InsultDBFactory:
                     adjektiv = adj[grammatik_geschlecht]
                     steigerung = steig
 
-                    text = "Du {} {} {}".format(steigerung, adjektiv, substantiv)
+                    text = "Du bist ein {} {} {}".format(steigerung, adjektiv, substantiv)
                     filename = FILENAME_PATTERN.format(count)
                     
                     if zielgeschlecht == "m":
@@ -89,7 +93,7 @@ class InsultDBFactory:
                         'adjektiv': adjektiv,
                         'substantiv': substantiv,
                         'zielgeschlecht': zielgeschlecht,
-                        'filename': filename,
+                        'filename': filename + ".ogg",
                         'text': text
                     }
 
