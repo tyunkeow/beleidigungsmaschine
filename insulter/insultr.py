@@ -66,7 +66,7 @@ class Insultr:
 
 
     def say_hello(self):
-        play_sound(AUDIO_DB_DIR + "/audio" + "/hello.aiff")
+        play_sound(AUDIO_DB_DIR + "/audio" + "/hello.ogg")
 
 
     def log(self, msg):

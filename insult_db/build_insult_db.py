@@ -113,7 +113,7 @@ class InsultDBFactory:
         out_file.close()
 
     def say_hello(self):
-        play_sound(AUDIO_DB_DIR + "/hello.aiff")
+        play_sound(AUDIO_DB_DIR + "/hello.ogg")
 
     def log(self, msg):
         print msg
