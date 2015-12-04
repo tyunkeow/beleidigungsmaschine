@@ -39,9 +39,10 @@ RUN git clone https://github.com/mikebrady/shairport-sync.git && \
     make && \
     make install 
 
-RUN mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.orig
+#RUN mv /usr/share/alsa/alsa.conf /usr/share/alsa/alsa.orig
+#RUN sed s/defaults.ctl.card\ 0/defaults.ctl.card\ 1/ /usr/share/alsa/alsa.orig | sed s/defaults.pcm.card\ 0/defaults.pcm.card\ 1/ > /usr/share/alsa/alsa.conf
 
-RUN sed s/defaults.ctl.card\ 0/defaults.ctl.card\ 1/ /usr/share/alsa/alsa.orig | sed s/defaults.pcm.card\ 0/defaults.pcm.card\ 1/ > /usr/share/alsa/alsa.conf
+ADD asound.conf /etc/asound.conf
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
