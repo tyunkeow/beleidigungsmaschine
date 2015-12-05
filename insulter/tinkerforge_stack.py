@@ -10,22 +10,17 @@ import syslog
 
 
 class PiTinkerforgeStack:
-    host = '192.168.178.36' #raspi
+    #host = '192.168.178.36' #raspi
     #host = '127.0.0.1' #localhost
-    #host = 'brickd'
+    host = 'brickd'
     port = 4223
-    #uid_master = '6JKxCC'
-    #uid_motion = 'oRL'
-    #uid_poti_left = 'ejC'
-    #uid_poti_right = 'ejm'
-    #uid_io = 'hcs'
     female = False
 
     def __init__(self):
         syslog.openlog('insultr-tf', 0, syslog.LOG_LOCAL4)
 
         self.poti_left = None
-        self.poti_right = None
+        self.poti_volume = None
         self.io =None
 
         self.con = IPConnection()
@@ -35,12 +30,6 @@ class PiTinkerforgeStack:
                                      self.cb_enumerate)
         self.con.register_callback(IPConnection.CALLBACK_CONNECTED, 
                                      self.cb_connected)
-
-        #self.master = Master(self.uid_master, self.con)
-        #self.motion = MotionDetector(self.uid_motion, self.con)
-        #self.poti_left = RotaryPoti(self.uid_poti_left, self.con)
-        #self.poti_right = RotaryPoti(self.uid_poti_right, self.con)
-        #self.io = IO4(self.uid_io, self.con)
         
         self.insultr = Insultr()
         self.log("---" + str(15^15))
@@ -80,8 +69,9 @@ class PiTinkerforgeStack:
             # Enumeration is for Temperature Bricklet
             if device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
                 # Create RotaryPoti device object
-                self.poti_right = RotaryPoti(uid, self.con) 
-
+                self.poti_volume = RotaryPoti(uid, self.con) 
+                self.poti_volume.register_callback(self.poti_volume.CALLBACK_POSITION, self.poti_volume_changed)
+ 
 
     # Callback handles reconnection of IP Connection
     def cb_connected(self, connected_reason):
@@ -100,11 +90,24 @@ class PiTinkerforgeStack:
         if self.poti_left:
             control = self.poti_left.get_position()
 
-        speed = 0
-        if self.poti_right:
-            speed = self.poti_right.get_position()
+        MAX_VOLUME = 80
+        volume_percent = 65
+        if self.poti_volume:
+            position = self.poti_volume.get_position() # between -150 and 150
+            self.poti_volume_changed(position)
+        else:            
+            self.set_volume(volume_percent)
+        
+        self.insultr.speak_next_insult(control=control)
 
-        self.insultr.speak_next_insult(control=control, speed=speed)
+    def set_volume(self, volume_percent=65):
+        set_volume_cmd = 'amixer sset Master {}%'.format(volume_percent)
+        log("Setting volume with command: " + set_volume_cmd)
+        os.system(set_volume_cmd)
+
+    def poti_volume_changed(self, position):
+        volume_percent = ((position + 150) / 300) * MAX_VOLUME
+        self.set_volume()
 
     def motion_cycle_ended(self):
         self.log("READY for motion detection!")
@@ -156,8 +159,8 @@ if __name__ == "__main__":
     stack.connect()
     if stack.poti_left:
         print "Poti left position  : ", stack.poti_left.get_position()
-    if stack.poti_right:
-        print "Poti right position : ", stack.poti_right.get_position()
+    if stack.poti_volume:
+        print "Poti volume position : ", stack.poti_volume.get_position()
     #stack.register_callbacks()
     stack.insultr.say_hello()
 
