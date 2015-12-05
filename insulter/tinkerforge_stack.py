@@ -95,9 +95,6 @@ class PiTinkerforgeStack:
         self.insult()
 
     def insult(self):
-        ziel_geschlecht = "m"
-        if self.female:
-            ziel_geschlecht = "f"
 
         control = 0 
         if self.poti_left:
@@ -107,7 +104,7 @@ class PiTinkerforgeStack:
         if self.poti_right:
             speed = self.poti_right.get_position()
 
-        self.insultr.speak_next_insult(ziel_geschlecht, control=control, speed=speed)
+        self.insultr.speak_next_insult(control=control, speed=speed)
 
     def motion_cycle_ended(self):
         self.log("READY for motion detection!")
@@ -135,9 +132,11 @@ class PiTinkerforgeStack:
         if is_on:
             self.log("sex was set to MALE")
             self.female = False
+            self.insultr.set_maennlich()
         else:
             self.log("sex was set to FEMALE")
             self.female = True
+            self.insultr.set_weiblich()
 
 
     def register_callbacks(self):
