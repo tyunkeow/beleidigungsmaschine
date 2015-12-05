@@ -4,6 +4,7 @@ from tinkerforge.bricklet_motion_detector import MotionDetector
 from tinkerforge.bricklet_rotary_poti import RotaryPoti
 from tinkerforge.bricklet_io4 import IO4
 from time import sleep
+import os
 import sys
 from insultr import Insultr
 import syslog

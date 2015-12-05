@@ -55,6 +55,16 @@ class InsultDBFactory:
         if not os.path.isdir(AUDIO_DB_DIR):
             os.makedirs(AUDIO_DB_DIR)
 
+
+        hello_file = AUDIO_DB_DIR + "/hello"
+        text2soundfile("Beleidigungsmaschine, einsatzbereit", hello_file)
+
+        modus_maennlich_file = AUDIO_DB_DIR + "/ModusMaennlich"
+        text2soundfile("Beleidigungsmodus, maennlich", modus_maennlich_file)
+
+        modus_weiblich_file = AUDIO_DB_DIR + "/ModusWeiblich"
+        text2soundfile("Beleidigungsmodus, weiblich", modus_weiblich_file)
+
         insult_db = {}
         insult_db_index_zielgeschlecht = {}
         insult_db_index_zielgeschlecht['m'] = []
@@ -97,7 +107,7 @@ class InsultDBFactory:
                         'text': text
                     }
 
-                    text2soundfile(text, AUDIO_DB_DIR + filename, overwrite=False, female=female)
+                    text2soundfile(text, AUDIO_DB_DIR + filename)
                     #print json.dumps(insult_db, indent=4)
                     count += 1
 
