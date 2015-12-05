@@ -102,7 +102,7 @@ class PiTinkerforgeStack:
 
     def set_volume(self, volume_percent=65):
         set_volume_cmd = 'amixer sset Master {}%'.format(volume_percent)
-        log("Setting volume with command: " + set_volume_cmd)
+        self.log("Setting volume with command: " + set_volume_cmd)
         os.system(set_volume_cmd)
 
     def poti_volume_changed(self, position):
