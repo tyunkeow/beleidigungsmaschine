@@ -24,6 +24,7 @@ def play_sound(filename, pitch=0, tempo=1):
 class Insultr:
     ins_data = None
     zielgeschlecht2Id = None
+    zielgeschlecht = 'f' # can be 'f' or 'm'
     last_substantiv = None
     last_adjektiv = None
     last_steigerung = None
@@ -48,11 +49,11 @@ class Insultr:
         idx = random.randint(0, len(list) - 1)
         return list[idx], idx 
 
-    def speak_next_insult(self, zielgeschlecht, control=0, speed=0):
+    def speak_next_insult(self, control=0, speed=0):
 
         # The simplest thing that could possibly work... TODO use a 'real' database
         while True:
-            id, idx = self.pickRandom(self.zielgeschlecht2Id[zielgeschlecht])
+            id, idx = self.pickRandom(self.zielgeschlecht2Id[self.zielgeschlecht])
             insult = self.ins_data[str(id)]
             if not insult['substantiv'] == self.last_substantiv:
                 break
@@ -68,6 +69,14 @@ class Insultr:
     def say_hello(self):
         play_sound(AUDIO_DB_DIR + "/audio" + "/hello.ogg")
 
+    def set_maennlich(self):
+        play_sound(AUDIO_DB_DIR + "/audio" + "/ModusMaennlich.ogg")
+        self.zielgeschlecht = 'm'
+
+    def set_weiblich(self):
+        play_sound(AUDIO_DB_DIR + "/audio" + "/ModusWeiblich.ogg")
+        self.zielgeschlecht = 'f'
+
 
     def log(self, msg):
         print msg
@@ -77,6 +86,8 @@ if __name__ == "__main__":
     insultr = Insultr()
     #insulter.create_insult_audio_db()
 
-    insultr.speak_next_insult("m")
-    insultr.speak_next_insult("f")
+    insultr.set_weiblich()
+    insultr.speak_next_insult()
+    insultr.set_maennlich()
+    insultr.speak_next_insult()
 
