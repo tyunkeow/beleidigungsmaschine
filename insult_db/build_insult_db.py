@@ -11,6 +11,11 @@ AUDIO_DB_FILE = MY_DIR + "/insult_db.json"
 AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT = MY_DIR + "/insult_db_index_zielgeschlecht.json"
 FILENAME_PATTERN = '/insult{}'
 
+# special sound files
+HELLO_FILE = AUDIO_DB_DIR + "/hello"
+MODUS_MAENNLICH_FILE = AUDIO_DB_DIR + "/ModusMaennlich"
+MODUS_WEIBLICH_FILE = AUDIO_DB_DIR + "/ModusWeiblich"
+
 def text2soundfile(text, filename, overwrite=False, female=True):
     filename = os.path.expanduser(filename)
     file_exists = os.path.exists(filename)
@@ -55,15 +60,9 @@ class InsultDBFactory:
         if not os.path.isdir(AUDIO_DB_DIR):
             os.makedirs(AUDIO_DB_DIR)
 
-
-        hello_file = AUDIO_DB_DIR + "/hello"
-        text2soundfile("Beleidigungsmaschine, einsatzbereit", hello_file)
-
-        modus_maennlich_file = AUDIO_DB_DIR + "/ModusMaennlich"
-        text2soundfile("Beleidigungsmodus, maennlich", modus_maennlich_file)
-
-        modus_weiblich_file = AUDIO_DB_DIR + "/ModusWeiblich"
-        text2soundfile("Beleidigungsmodus, weiblich", modus_weiblich_file)
+        text2soundfile("Beleidigungsmaschine, einsatzbereit", HELLO_FILE)
+        text2soundfile("Beleidigungsmodus, maennlich", MODUS_MAENNLICH_FILE)
+        text2soundfile("Beleidigungsmodus, weiblich", MODUS_WEIBLICH_FILE)
 
         insult_db = {}
         insult_db_index_zielgeschlecht = {}

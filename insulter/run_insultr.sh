@@ -2,6 +2,6 @@
 
 env
 
-ping brickd
+#ping brickd
 
 python tinkerforge_stack.py

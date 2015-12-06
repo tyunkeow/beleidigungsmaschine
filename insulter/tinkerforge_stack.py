@@ -56,6 +56,7 @@ class PiTinkerforgeStack:
         if enumeration_type == IPConnection.ENUMERATION_TYPE_CONNECTED or \
            enumeration_type == IPConnection.ENUMERATION_TYPE_AVAILABLE:
             
+            self.log("Found device with uid {}: ident={}, position={}".format(uid, device_identifier, position))
             # Enumeration is for LCD Bricklet
             if device_identifier == IO4.DEVICE_IDENTIFIER:
                 # Create IO4 device object
