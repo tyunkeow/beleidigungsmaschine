@@ -9,7 +9,7 @@ echo "This script is located at $SCRIPTPATH"
 
 echo "Starting docker containers..."
 # start syslog daemon container
-docker run -d --privileged --name syslog -v /tmp/syslogdev:/dev syslog
+docker run -d --privileged --name syslog -v /tmp/syslogdev:/dev -v /tmp/syslogvarlog:/var/log syslog
 docker run -d --privileged -p 4223:4223 --name brickd tinkerforge-brickd
 docker run -d --privileged --name insultr -v /tmp/syslogdev/log:/dev/log --link brickd:brickd -v "${SCRIPTPATH}/insult_db:/insultr/insult_db" insultr
 docker run --name shairport -v /dev/snd:/dev/snd:rw --net="host" --privileged -d shairport

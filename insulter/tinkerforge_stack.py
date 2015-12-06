@@ -91,13 +91,11 @@ class PiTinkerforgeStack:
         if self.poti_left:
             control = self.poti_left.get_position()
 
-        MAX_VOLUME = 80
-        volume_percent = 65
         if self.poti_volume:
             position = self.poti_volume.get_position() # between -150 and 150
             self.poti_volume_changed(position)
         else:            
-            self.set_volume(volume_percent)
+            self.set_volume(50)
         
         self.insultr.speak_next_insult(control=control)
 
@@ -107,6 +105,7 @@ class PiTinkerforgeStack:
         os.system(set_volume_cmd)
 
     def poti_volume_changed(self, position):
+        MAX_VOLUME = 80
         volume_percent = ((position + 150) / 300) * MAX_VOLUME
         self.set_volume()
 
