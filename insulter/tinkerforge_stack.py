@@ -16,13 +16,13 @@ class PiTinkerforgeStack:
     host = 'brickd'
     port = 4223
     female = False
+    io = None
+    poti_left = None
+    poti_volume = None
+    master = None
 
     def __init__(self):
         syslog.openlog('insultr-tf', 0, syslog.LOG_LOCAL4)
-
-        self.poti_left = None
-        self.poti_volume = None
-        self.io =None
 
         self.con = IPConnection()
 
@@ -33,6 +33,7 @@ class PiTinkerforgeStack:
                                      self.cb_connected)
         
         self.insultr = Insultr()
+        self.set_volume(50)
         self.log("---" + str(15^15))
         self.log("---" + str(15^14))
 
@@ -68,9 +69,11 @@ class PiTinkerforgeStack:
                 self.set_ziel_geschlecht(self.io.get_value())
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
                 self.log("Creating RotaryPoti device object with uid {}".format(uid))
-                # Create RotaryPoti device object
                 self.poti_volume = RotaryPoti(uid, self.con) 
                 self.poti_volume.register_callback(self.poti_volume.CALLBACK_POSITION, self.poti_volume_changed)
+            elif device_identifier == Master.DEVICE_IDENTIFIER:
+                self.log("Creating Master device object with uid {}".format(uid))
+                self.master = Master(uid, self.con)
             else: 
                 self.log("Could not register unknown device bricklet with uid {}".format(uid))
 
@@ -99,7 +102,7 @@ class PiTinkerforgeStack:
         
         self.insultr.speak_next_insult(control=control)
 
-    def set_volume(self, volume_percent=65):
+    def set_volume(self, volume_percent=50):
         set_volume_cmd = 'amixer sset Master {}%'.format(volume_percent)
         self.log("Setting volume with command: " + set_volume_cmd)
         os.system(set_volume_cmd)
