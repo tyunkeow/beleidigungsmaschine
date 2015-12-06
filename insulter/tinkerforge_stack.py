@@ -57,9 +57,9 @@ class PiTinkerforgeStack:
         if enumeration_type == IPConnection.ENUMERATION_TYPE_CONNECTED or \
            enumeration_type == IPConnection.ENUMERATION_TYPE_AVAILABLE:
             
-            self.log("Found device with uid {}: ident={}, position={}".format(uid, device_identifier, position))
+            self.log("cb_enumerate() Found device with uid {}: ident={}, position={}".format(uid, device_identifier, position))
             if device_identifier == IO4.DEVICE_IDENTIFIER:
-                self.log("Creating IO4 device object with uid {}".format(uid))
+                self.log("cb_enumerate() Creating IO4 device object with uid {}".format(uid))
                 self.io = IO4(uid, self.con) 
                 self.io.set_debounce_period(1000)
                 self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
@@ -68,14 +68,15 @@ class PiTinkerforgeStack:
                 #self.io.set_interrupt(1 << 1)
                 self.set_ziel_geschlecht(self.io.get_value())
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
-                self.log("Creating RotaryPoti device object with uid {}".format(uid))
+                self.log("cb_enumerate() Creating RotaryPoti device object with uid {}".format(uid))
                 self.poti_volume = RotaryPoti(uid, self.con) 
+                self.poti_volume.set_position_callback_period(100)
                 self.poti_volume.register_callback(self.poti_volume.CALLBACK_POSITION, self.poti_volume_changed)
             elif device_identifier == Master.DEVICE_IDENTIFIER:
-                self.log("Creating Master device object with uid {}".format(uid))
+                self.log("cb_enumerate() Creating Master device object with uid {}".format(uid))
                 self.master = Master(uid, self.con)
             else: 
-                self.log("Could not register unknown device bricklet with uid {}".format(uid))
+                self.log("cb_enumerate() Could not register unknown device bricklet with uid {}".format(uid))
 
     # Callback handles reconnection of IP Connection
     def cb_connected(self, connected_reason):
@@ -104,7 +105,7 @@ class PiTinkerforgeStack:
 
     def set_volume(self, volume_percent=50):
         set_volume_cmd = 'amixer sset Master {}%'.format(volume_percent)
-        self.log("Setting volume with command: " + set_volume_cmd)
+        self.log("set_volume() Setting volume with command: " + set_volume_cmd)
         os.system(set_volume_cmd)
 
     def poti_volume_changed(self, position):
@@ -116,19 +117,19 @@ class PiTinkerforgeStack:
         self.log("READY for motion detection!")
 
     def io_switch(self, interrupt_mask, value_mask):
-        self.log("IO4 triggered")
-        self.log('Interrupt by: ' + str(bin(interrupt_mask)))
-        self.log('Value: ' + str(bin(value_mask)))
+        self.log("io_switch() IO4 triggered")
+        self.log('io_switch() Interrupt by: ' + str(bin(interrupt_mask)))
+        self.log('io_switch() Value: ' + str(bin(value_mask)))
         #print('Val1: ' + str(value_mask))
 
         if interrupt_mask == 1:
-            self.log("Sex switched...")
+            self.log("io_switch() Sex switched...")
             # button 1 switched
             self.set_ziel_geschlecht(value_mask)
         elif interrupt_mask == 2:
-            self.log("Insult button pressed...")
+            self.log("io_switch() Insult button pressed...")
             button_up = value_mask&2
-            self.log("value_mask =" + str(button_up))
+            self.log("io_switch() value_mask =" + str(button_up))
             if button_up == 2:
                 self.insult()
         self.log("io_switch() end")
