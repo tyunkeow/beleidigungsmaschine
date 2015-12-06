@@ -108,10 +108,16 @@ class PiTinkerforgeStack:
         self.log("set_volume() Setting volume with command: " + set_volume_cmd)
         os.system(set_volume_cmd)
 
-    def poti_volume_changed(self, position=0.0):
+    def poti_volume_changed(self, position=0):
         self.log("poti_volume_changed() poti was set to position {}".format(position))
+        if position > 150:
+            position = 150
+        if position < -150:
+            position = -150
+        MIN_VOLUME = 25.0
         MAX_VOLUME = 80.0
-        volume_percent = ((position + 150.0) / 300.0) * MAX_VOLUME
+        poti_percent = ((position + 150.0) / 300.0) # between 0.0 and 1.0
+        volume_percent = MIN_VOLUME + ((MAX_VOLUME-MIN_VOLUME)*poti_percent)
         self.set_volume(volume_percent)
 
     def motion_cycle_ended(self):
