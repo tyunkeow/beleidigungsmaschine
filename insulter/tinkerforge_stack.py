@@ -109,9 +109,10 @@ class PiTinkerforgeStack:
         os.system(set_volume_cmd)
 
     def poti_volume_changed(self, position):
+        self.log("poti_volume_changed() poti was set to position {}".format(position))
         MAX_VOLUME = 80
         volume_percent = ((position + 150) / 300) * MAX_VOLUME
-        self.set_volume()
+        self.set_volume(volume_percent)
 
     def motion_cycle_ended(self):
         self.log("READY for motion detection!")
