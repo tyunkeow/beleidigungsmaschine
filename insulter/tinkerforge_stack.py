@@ -57,9 +57,8 @@ class PiTinkerforgeStack:
            enumeration_type == IPConnection.ENUMERATION_TYPE_AVAILABLE:
             
             self.log("Found device with uid {}: ident={}, position={}".format(uid, device_identifier, position))
-            # Enumeration is for LCD Bricklet
             if device_identifier == IO4.DEVICE_IDENTIFIER:
-                # Create IO4 device object
+                self.log("Creating IO4 device object with uid {}".format(uid))
                 self.io = IO4(uid, self.con) 
                 self.io.set_debounce_period(1000)
                 self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
@@ -67,13 +66,13 @@ class PiTinkerforgeStack:
                 self.io.set_interrupt((1 << 0) | (1 << 1))
                 #self.io.set_interrupt(1 << 1)
                 self.set_ziel_geschlecht(self.io.get_value())
-
-            # Enumeration is for Temperature Bricklet
-            if device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
+            elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
+                self.log("Creating RotaryPoti device object with uid {}".format(uid))
                 # Create RotaryPoti device object
                 self.poti_volume = RotaryPoti(uid, self.con) 
                 self.poti_volume.register_callback(self.poti_volume.CALLBACK_POSITION, self.poti_volume_changed)
- 
+            else: 
+                self.log("Could not register unknown device bricklet with uid {}".format(uid))
 
     # Callback handles reconnection of IP Connection
     def cb_connected(self, connected_reason):
