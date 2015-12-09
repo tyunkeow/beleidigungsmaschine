@@ -205,7 +205,7 @@
         },
         {
             "geschlecht": "n",
-            "wert": "Luder",
+            "wert": "Luhder",
             "ziel": "f"
         },
         {
@@ -301,6 +301,11 @@
         {
             "geschlecht": "f",
             "wert": "Brut der Hoelle",
+            "ziel": "f"
+        },
+        {
+            "geschlecht": "n",
+            "wert": "Miststueck",
             "ziel": "f"
         }
     ]
