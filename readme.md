@@ -21,7 +21,8 @@ You will need the following components:
 * https://www.tinkerforge.com/de/shop/power-supplies/step-down-power-supply.html
 * (optional) https://www.tinkerforge.com/de/shop/bricklets/human-input/rotary-poti-bricklet.html (2x)
 * (optional) https://www.tinkerforge.com/de/shop/bricklets/human-input/motion-detector-bricklet.html  
-* Power Supply 5V
+* HifiBerry AMP+
+* Power Supply 12V
 * Speaker
 * some kind of case for fixing the components. I've used [makerbeam](http://www.makerbeam.com).
  
@@ -33,14 +34,13 @@ Installation
 *   Flash SD Card. http://blog.hypriot.com/getting-started-with-docker-on-your-arm-device/
 *   Start Pi with the SD card and login as root
 *   Be paranoid: `sudo apt-get dist-upgrade`
-*   If you use a usb sound device:
-    Find your card number with `aplay --list-devices` (probably 1)
-    Adapt Dockerfile in submodule "insulter": 
-    Replace `defaults.ctl.card 1` with apropriate card number
+*   add `dtoverlay=hifiberry-amp` to /boot/config.txt
+*   remove `snd_bcm2835` from `/etc/modules` 
 *   `git clone https://github.com/tyunkeow/beleidigungsmaschine.git`
 *   `cd beleidigungsmaschine`
 *   `./build.sh`
-*   `./run.sh`
+*   `./start-beleidigungsmaschine.sh`
+*   or add `/root/beleidigungsmaschine/start-beleidigungsmaschine.sh` to rc.local
 *   Attach to a docker container: `docker exec -it syslog /bin/bash` 
  
 
