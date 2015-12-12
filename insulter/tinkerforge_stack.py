@@ -90,23 +90,19 @@ class PiTinkerforgeStack:
         self.insult()
 
     def insult(self):
-
-        control = 0 
-        if self.poti_left:
-            control = self.poti_left.get_position()
-
-        if self.poti_volume:
-            position = self.poti_volume.get_position() # between -150 and 150
-            self.poti_volume_changed(position)
-        else:            
-            self.set_volume(50)
-        
-        self.insultr.speak_next_insult(control=control)
+        self.insultr.speak_next_insult()
 
     def set_volume(self, volume_percent=50):
         set_volume_cmd = 'amixer sset Master {}%'.format(volume_percent)
         self.log("set_volume() Setting volume with command: " + set_volume_cmd)
         os.system(set_volume_cmd)
+
+    def set_volume_from_poti(self):
+        if self.poti_volume:
+            position = self.poti_volume.get_position()
+            self.poti_volume_changed(position)
+        else:            
+            self.set_volume(50)
 
     def poti_volume_changed(self, position=0):
         self.log("poti_volume_changed() poti was set to position {}".format(position))
@@ -128,6 +124,8 @@ class PiTinkerforgeStack:
         self.log('io_switch() Interrupt by: ' + str(bin(interrupt_mask)))
         self.log('io_switch() Value: ' + str(bin(value_mask)))
         #print('Val1: ' + str(value_mask))
+        
+        self.set_volume_from_poti()
 
         if interrupt_mask == 1:
             self.log("io_switch() Sex switched...")
