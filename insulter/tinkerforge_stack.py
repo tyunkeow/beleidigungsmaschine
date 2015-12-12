@@ -115,7 +115,7 @@ class PiTinkerforgeStack:
         if position < -150:
             position = -150
         MIN_VOLUME = 25.0
-        MAX_VOLUME = 80.0
+        MAX_VOLUME = 90.0
         poti_percent = ((position + 150.0) / 300.0) # between 0.0 and 1.0
         volume_percent = MIN_VOLUME + ((MAX_VOLUME-MIN_VOLUME)*poti_percent)
         self.set_volume(volume_percent)
