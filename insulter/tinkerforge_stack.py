@@ -59,7 +59,7 @@ class PiTinkerforgeStack:
             
             self.log("cb_enumerate() id {} - Found device: ident={}, position={}".format(uid, device_identifier, position))
             if device_identifier == IO4.DEVICE_IDENTIFIER:
-                self.log("cb_enumerate() Creating IO4 device object with uid {}".format(uid))
+                self.log("cb_enumerate() id {} - Creating IO4 device object".format(uid))
                 self.io = IO4(uid, self.con) 
                 self.io.set_debounce_period(1000)
 
@@ -129,9 +129,8 @@ class PiTinkerforgeStack:
 
     def io_switch(self, interrupt_mask, value_mask):
         self.log("io_switch() IO4 triggered")
-        self.log('io_switch() Interrupt by: ' + str(bin(interrupt_mask)))
+        self.log("io_switch() Interrupt by {} / {} ".format(str(bin(interrupt_mask)), interrupt_mask)
         self.log('io_switch() Value: ' + str(bin(value_mask)))
-        #print('Val1: ' + str(value_mask))
         
         self.set_volume_from_poti()
 
@@ -145,6 +144,8 @@ class PiTinkerforgeStack:
             self.log("io_switch() value_mask =" + str(button_up))
             if button_up == 2:
                 self.insult()
+        else: 
+            self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask))
         self.log("io_switch() end")
 
     def set_ziel_geschlecht(self, value_mask):
