@@ -129,7 +129,7 @@ class PiTinkerforgeStack:
 
     def io_switch(self, interrupt_mask, value_mask):
         self.log("io_switch() IO4 triggered")
-        self.log("io_switch() Interrupt by {} / {} ".format(str(bin(interrupt_mask)), interrupt_mask)
+        self.log("io_switch() Interrupt by {} / {} ".format(str(bin(interrupt_mask)), interrupt_mask))
         self.log('io_switch() Value: ' + str(bin(value_mask)))
         
         self.set_volume_from_poti()
