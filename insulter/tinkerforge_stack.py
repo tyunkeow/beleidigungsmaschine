@@ -57,31 +57,34 @@ class PiTinkerforgeStack:
         if enumeration_type == IPConnection.ENUMERATION_TYPE_CONNECTED or \
            enumeration_type == IPConnection.ENUMERATION_TYPE_AVAILABLE:
             
-            self.log("cb_enumerate() Found device with uid {}: ident={}, position={}".format(uid, device_identifier, position))
+            self.log("cb_enumerate() id {} - Found device: ident={}, position={}".format(uid, device_identifier, position))
             if device_identifier == IO4.DEVICE_IDENTIFIER:
                 self.log("cb_enumerate() Creating IO4 device object with uid {}".format(uid))
                 self.io = IO4(uid, self.con) 
                 self.io.set_debounce_period(1000)
 
                 if position == 'a':
+                    self.log("cb_enumerate() id {} - Configuring IO4 device object at position a (switches).".format(uid))
                     self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
-                    # Enable interrupt on pin 0
-                    self.io.set_interrupt((1 << 0) | (1 << 1))
-                    #self.io.set_interrupt(1 << 1)
+                    self.io.set_configuration(15, 'i', True)
+                    # Enable interrupt on pin 0 and 1
+                    self.io.set_interrupt(1 << 0)
+                    self.io.set_interrupt(1 << 1)
                     self.set_ziel_geschlecht(self.io.get_value())
                 else:
+                    self.log("cb_enumerate() id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
                     self.io.set_configuration((1 << 0) | (1 << 1), "o", True)
 
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
-                self.log("cb_enumerate() Creating RotaryPoti device object with uid {}".format(uid))
+                self.log("cb_enumerate() id {} - Creating RotaryPoti device object".format(uid))
                 self.poti_volume = RotaryPoti(uid, self.con) 
                 self.poti_volume.set_position_callback_period(100)
                 self.poti_volume.register_callback(self.poti_volume.CALLBACK_POSITION, self.poti_volume_changed)
             elif device_identifier == Master.DEVICE_IDENTIFIER:
-                self.log("cb_enumerate() Creating Master device object with uid {}".format(uid))
+                self.log("cb_enumerate() id {} - Creating Master device object".format(uid))
                 self.master = Master(uid, self.con)
             else: 
-                self.log("cb_enumerate() Could not register unknown device bricklet with uid {}".format(uid))
+                self.log("cb_enumerate() id {} - Could not register unknown device bricklet".format(uid))
 
     # Callback handles reconnection of IP Connection
     def cb_connected(self, connected_reason):
