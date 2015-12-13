@@ -62,11 +62,16 @@ class PiTinkerforgeStack:
                 self.log("cb_enumerate() Creating IO4 device object with uid {}".format(uid))
                 self.io = IO4(uid, self.con) 
                 self.io.set_debounce_period(1000)
-                self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
-                # Enable interrupt on pin 0
-                self.io.set_interrupt((1 << 0) | (1 << 1))
-                #self.io.set_interrupt(1 << 1)
-                self.set_ziel_geschlecht(self.io.get_value())
+
+                if position == 'a':
+                    self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
+                    # Enable interrupt on pin 0
+                    self.io.set_interrupt((1 << 0) | (1 << 1))
+                    #self.io.set_interrupt(1 << 1)
+                    self.set_ziel_geschlecht(self.io.get_value())
+                else:
+                    self.io.set_configuration((1 << 0) | (1 << 1), "o", True)
+
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
                 self.log("cb_enumerate() Creating RotaryPoti device object with uid {}".format(uid))
                 self.poti_volume = RotaryPoti(uid, self.con) 
@@ -145,10 +150,14 @@ class PiTinkerforgeStack:
             self.log("sex was set to MALE")
             self.female = False
             self.insultr.set_maennlich()
+            self.io.set_configuration(1 << 0, "o", True)
+            self.io.set_configuration(1 << 1, "o", False)
         else:
             self.log("sex was set to FEMALE")
             self.female = True
             self.insultr.set_weiblich()
+            self.io.set_configuration(1 << 0, "o", False)
+            self.io.set_configuration(1 << 1, "o", True)
 
 
     def register_callbacks(self):
