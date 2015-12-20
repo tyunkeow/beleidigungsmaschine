@@ -37,9 +37,9 @@ class PiTinkerforgeStack:
         self.log("")
         self.log("PiTinkerforgeStack(): Connecting to host " + self.host + " on port " + str(self.port))
         self.con.connect(self.host, self.port)
-        self.log("PiTinkerforgeStack(): enumerate... waitung 5 seconds...")
-        self.con.enumerate()
-        time.sleep(5)
+        self.log("PiTinkerforgeStack(): waitung 5 seconds for initialization (enumerate)...")
+        #self.con.enumerate()
+        sleep(5)
         self.log("PiTinkerforgeStack(): done.")
 
         self.insultr = Insultr()
@@ -59,7 +59,7 @@ class PiTinkerforgeStack:
     # configuration of lcd and temperature callbacks, backlight etc.
     def cb_enumerate(self, uid, connected_uid, position, hardware_version, 
                      firmware_version, device_identifier, enumeration_type):
-        print "cb_enumerate ######################"
+        self.log("cb_enumerate(): callback")
         if enumeration_type == IPConnection.ENUMERATION_TYPE_CONNECTED or \
            enumeration_type == IPConnection.ENUMERATION_TYPE_AVAILABLE:
             
