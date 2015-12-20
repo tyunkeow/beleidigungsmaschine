@@ -2,15 +2,7 @@
 
 apt-get update -q
 
-apt-get update && apt-get install -y \
-	apt-utils \
-    alsa-base \
-	alsa-utils \
-	libasound2-dev \
-    libasound2-plugin-equal \
-    sox \
-    vim
-
+#build tools
 apt-get install -y --no-install-recommends \
 	autoconf \
 	automake \
@@ -19,6 +11,7 @@ apt-get install -y --no-install-recommends \
 	avahi-utils \
 	build-essential \
 	ca-certificates \
+	curl \
 	dbus \
 	git-core \
 	libavahi-client-dev \
@@ -28,19 +21,44 @@ apt-get install -y --no-install-recommends \
 	libnss-mdns \
 	libpopt-dev \
 	libssl-dev \
+	libusb-1.0-0 \
+	libudev0 \
+	pm-utils \
 	ssh \
 	supervisor
 
+#sound
+apt-get apt-get install -y --no-install-recommends \
+	apt-utils \
+    alsa-base \
+	alsa-utils \
+	libasound2-dev \
+    libasound2-plugin-equal \
+    sox \
+    vim
+
+
+# install pip
 curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
 python get-pip.py
 
+# install tinkerforge
 pip install tinkerforge
 
-mkdir /root/.ssh/
+# install brickd 
+curl -SL "http://download.tinkerforge.com/tools/brickd/linux/brickd-${BRICKD_VERSION}_armhf.deb" -o brickd.deb
+dpkg -i brickd.deb
+rm brickd.deb
+cp brickd /etc/init.d/
+
+# install shairport
+mkdir -p /root/.ssh/
 ssh-keyscan github.com >> /root/.ssh/known_hosts
 
-git clone https://github.com/mikebrady/shairport-sync.git && \
-    cd shairport-sync && \
+cd /tmp
+git clone https://github.com/mikebrady/shairport-sync.git
+
+cd /tmp/shairport-sync && \
     autoreconf -i -f && \
     ./configure --with-alsa --with-avahi --with-ssl=openssl --with-systemd && \
     make && \
