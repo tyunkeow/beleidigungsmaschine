@@ -110,7 +110,7 @@ class PiTinkerforgeStack:
         self.insultr.speak_next_insult()
 
     def set_volume(self, volume_percent=50):
-        set_volume_cmd = 'amixer sset Master {}%'.format(volume_percent)
+        set_volume_cmd = 'amixer -q sset Master {}%'.format(volume_percent)
         self.log("set_volume(): Setting volume with command: " + set_volume_cmd)
         os.system(set_volume_cmd)
 
