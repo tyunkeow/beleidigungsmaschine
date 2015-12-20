@@ -34,20 +34,20 @@ class PiTinkerforgeStack:
         
         self.insultr = Insultr()
         self.set_volume(50)
-        self.log("---" + str(15^15))
-        self.log("---" + str(15^14))
+        self.log("PiTinkerforgeStack(): " + str(15^15))
+        self.log("PiTinkerforgeStack(): " + str(15^14))
 
     def log(self, msg):
         logging.info(msg)
         #print msg
 
     def connect(self):
-        self.log("Connecting to host " + self.host + " on port " + str(self.port))
+        self.log("connect(): Connecting to host " + self.host + " on port " + str(self.port))
         self.con.connect(self.host, self.port)
         self.con.enumerate()
 
     def disconnect(self):
-        self.log("Disconnecting from host " + self.host)
+        self.log("disconnect(): Disconnecting from host " + self.host)
         self.con.disconnect()
 
     # Callback handles device connections and configures possibly lost 
@@ -57,14 +57,14 @@ class PiTinkerforgeStack:
         if enumeration_type == IPConnection.ENUMERATION_TYPE_CONNECTED or \
            enumeration_type == IPConnection.ENUMERATION_TYPE_AVAILABLE:
             
-            self.log("cb_enumerate() id {} - Found device: ident={}, position={}".format(uid, device_identifier, position))
+            self.log("cb_enumerate(): id {} - Found device: ident={}, position={}".format(uid, device_identifier, position))
             if device_identifier == IO4.DEVICE_IDENTIFIER:
-                self.log("cb_enumerate() id {} - Creating IO4 device object".format(uid))
+                self.log("cb_enumerate(): id {} - Creating IO4 device object".format(uid))
                 self.io = IO4(uid, self.con) 
                 self.io.set_debounce_period(1000)
 
                 if position == 'a':
-                    self.log("cb_enumerate() id {} - Configuring IO4 device object at position a (switches).".format(uid))
+                    self.log("cb_enumerate(): id {} - Configuring IO4 device object at position a (switches).".format(uid))
                     self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
                     self.io.set_configuration(15, 'i', True)
                     # Enable interrupt on pin 0 and 1
@@ -72,19 +72,19 @@ class PiTinkerforgeStack:
                     self.io.set_interrupt(1 << 1)
                     self.set_ziel_geschlecht(self.io.get_value())
                 else:
-                    self.log("cb_enumerate() id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
+                    self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
                     self.io.set_configuration((1 << 0) | (1 << 1), "o", True)
 
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
-                self.log("cb_enumerate() id {} - Creating RotaryPoti device object".format(uid))
+                self.log("cb_enumerate(): id {} - Creating RotaryPoti device object".format(uid))
                 self.poti_volume = RotaryPoti(uid, self.con) 
                 self.poti_volume.set_position_callback_period(100)
                 self.poti_volume.register_callback(self.poti_volume.CALLBACK_POSITION, self.poti_volume_changed)
             elif device_identifier == Master.DEVICE_IDENTIFIER:
-                self.log("cb_enumerate() id {} - Creating Master device object".format(uid))
+                self.log("cb_enumerate(): id {} - Creating Master device object".format(uid))
                 self.master = Master(uid, self.con)
             else: 
-                self.log("cb_enumerate() id {} - Could not register unknown device bricklet".format(uid))
+                self.log("cb_enumerate(): id {} - Could not register unknown device bricklet".format(uid))
 
     # Callback handles reconnection of IP Connection
     def cb_connected(self, connected_reason):
@@ -102,7 +102,7 @@ class PiTinkerforgeStack:
 
     def set_volume(self, volume_percent=50):
         set_volume_cmd = 'amixer sset Master {}%'.format(volume_percent)
-        self.log("set_volume() Setting volume with command: " + set_volume_cmd)
+        self.log("set_volume(): Setting volume with command: " + set_volume_cmd)
         os.system(set_volume_cmd)
 
     def set_volume_from_poti(self):
@@ -168,28 +168,17 @@ class PiTinkerforgeStack:
             self.io.set_configuration(1 << 1, "o", True)
 
 
-    def register_callbacks(self):
-        self.log("Registering callback to motion detector...")
-        self.motion.register_callback(self.motion.CALLBACK_MOTION_DETECTED, self.motion_detected)
-        self.motion.register_callback(self.motion.CALLBACK_DETECTION_CYCLE_ENDED, self.motion_cycle_ended)
-        self.io.set_debounce_period(1000)
-        self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
-        # Enable interrupt on pin 0
-        self.io.set_interrupt((1 << 0) | (1 << 1))
-        #self.io.set_interrupt(1 << 1)
-        self.log("register done")
-
 
 if __name__ == "__main__":
-    logging.basicConfig(filename='/var/log/insultr.log',level=logging.DEBUG)
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(filename='/var/log/insultr.log', 
+        level=logging.DEBUG, 
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     stack = PiTinkerforgeStack()
     stack.connect()
     if stack.poti_left:
         print "Poti left position  : ", stack.poti_left.get_position()
     if stack.poti_volume:
         print "Poti volume position : ", stack.poti_volume.get_position()
-    #stack.register_callbacks()
     stack.insultr.say_hello()
 
     sleep(1000000)
