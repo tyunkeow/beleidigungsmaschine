@@ -54,6 +54,7 @@ class PiTinkerforgeStack:
     # configuration of lcd and temperature callbacks, backlight etc.
     def cb_enumerate(self, uid, connected_uid, position, hardware_version, 
                      firmware_version, device_identifier, enumeration_type):
+        print "cb_enumerate ######################"
         if enumeration_type == IPConnection.ENUMERATION_TYPE_CONNECTED or \
            enumeration_type == IPConnection.ENUMERATION_TYPE_AVAILABLE:
             
