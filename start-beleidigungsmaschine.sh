@@ -8,7 +8,7 @@ echo "This script is located at $SCRIPTPATH"
 $SCRIPTPATH/stop-beleidigungsmaschine.sh
 
 echo "Starting brickd..."
-/etc/init.d/brickd start
+/etc/init.d/brickd.sh start
 
 echo "Starting dbus"
 service dbus start
