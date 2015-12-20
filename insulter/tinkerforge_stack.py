@@ -182,6 +182,7 @@ class PiTinkerforgeStack:
 
 if __name__ == "__main__":
     logging.basicConfig(filename='/var/log/insultr.log',level=logging.DEBUG)
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     stack = PiTinkerforgeStack()
     stack.connect()
     if stack.poti_left:
