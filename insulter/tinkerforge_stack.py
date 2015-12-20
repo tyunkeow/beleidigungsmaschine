@@ -93,6 +93,9 @@ class PiTinkerforgeStack:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
                     self.io4_lights = io
                     self.io4_lights.set_configuration((1 << 0) | (1 << 1), "o", True)
+                    self.io4_lights.register_callback(self.io4_lights.CALLBACK_INTERRUPT, self.cb_io_lights)
+                    self.io4_lights.set_interrupt(1 << 3)
+
 
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
                 self.log("cb_enumerate(): id {} - Creating RotaryPoti device object".format(uid))
@@ -165,12 +168,24 @@ class PiTinkerforgeStack:
             if button_up == 2:
                 self.insult()
         else: 
-            self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask))
+            self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
         #except:
         #    e = sys.exc_info()[0]
         #    self.log("io_switch() ERROR: {}".format(e))
             
         self.log("io_switch() end")
+
+    def cb_io_lights(self, interrupt_mask, value_mask):
+        self.log("io_lights() IO4 triggered")
+        interrupt_mask_str = format(interrupt_mask, "04b")
+        value_mask_str = format(value_mask, "04b")
+        self.log("io_lights() Interrupt mask {} = {} ".format(interrupt_mask_str, interrupt_mask))
+        self.log("io_lights() Value mask: {} = {}".format(value_mask_str, value_mask))
+
+        if interrupt_mask == 3:
+            self.log("io_switch() Shutdown button...")
+        else: 
+            self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
 
     def set_ziel_geschlecht(self, value_mask):
         is_on = value_mask^14
