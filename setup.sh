@@ -11,6 +11,8 @@ apt-get update && apt-get install -y \
     sox \
     vim
 
+pip install tinkerforge
+
 apt-get install -y --no-install-recommends \
 	autoconf \
 	automake \
@@ -31,4 +33,13 @@ apt-get install -y --no-install-recommends \
 	ssh \
 	supervisor
 
-pip install tinkerforge
+mkdir /root/.ssh/
+ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+git clone https://github.com/mikebrady/shairport-sync.git && \
+    cd shairport-sync && \
+    autoreconf -i -f && \
+    ./configure --with-alsa --with-avahi --with-ssl=openssl --with-systemd && \
+    make && \
+    make install 
+
