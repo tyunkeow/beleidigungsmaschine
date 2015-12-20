@@ -91,7 +91,8 @@ class PiTinkerforgeStack:
                 else:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
                     self.io4_lights = io
-                    self.io4_lights.set_configuration((1 << 0) | (1 << 1), "o", True)
+                    self.io4_lights.set_configuration((1 << 0), "o", self.female)
+                    self.io4_lights.set_configuration((1 << 1), "o", !self.female)
                     self.io4_lights.register_callback(self.io4_lights.CALLBACK_INTERRUPT, self.cb_io_lights)
                     self.io4_lights.set_interrupt(15)
 
@@ -197,16 +198,13 @@ class PiTinkerforgeStack:
         if is_on:
             self.log("sex was set to MALE")
             self.female = False
+            self.io4_lights.set_value(2)
             self.insultr.set_maennlich()
-            self.io4_lights.set_configuration(1 << 0, "o", True)
-            self.io4_lights.set_configuration(1 << 1, "o", False)
         else:
             self.log("sex was set to FEMALE")
             self.female = True
-            self.insultr.set_weiblich()
-            self.io4_lights.set_configuration(1 << 0, "o", False)
-            self.io4_lights.set_configuration(1 << 1, "o", True)
-
+            self.io4_lights.set_value(1)
+            self.insultr.set_weiblich()            
 
 
 if __name__ == "__main__":
