@@ -31,20 +31,20 @@ class PiTinkerforgeStack:
                                      self.cb_enumerate)
         self.con.register_callback(IPConnection.CALLBACK_CONNECTED, 
                                      self.cb_connected)
-        
+
+        self.log("PiTinkerforgeStack(): Connecting to host " + self.host + " on port " + str(self.port))
+        self.con.connect(self.host, self.port)
+        self.log("PiTinkerforgeStack(): enumerate...")
+        self.con.enumerate()
+        self.log("PiTinkerforgeStack(): done.")
+
         self.insultr = Insultr()
         self.set_volume(50)
-        self.log("PiTinkerforgeStack(): " + str(15^15))
-        self.log("PiTinkerforgeStack(): " + str(15^14))
+        #self.log("PiTinkerforgeStack(): str(15^15)=" + str(15^15))
+        #self.log("PiTinkerforgeStack(): str(15^14)=" + str(15^14))
 
     def log(self, msg):
         logging.info(msg)
-        #print msg
-
-    def connect(self):
-        self.log("connect(): Connecting to host " + self.host + " on port " + str(self.port))
-        self.con.connect(self.host, self.port)
-        self.con.enumerate()
 
     def disconnect(self):
         self.log("disconnect(): Disconnecting from host " + self.host)
@@ -91,11 +91,8 @@ class PiTinkerforgeStack:
         # Enumerate devices again. If we reconnected, the Bricks/Bricklets
         # may have been offline and the configuration may be lost.
         # In this case we don't care for the reason of the connection
+        print "######################"
         self.con.enumerate()    
-
-    def motion_detected(self):
-        self.log("CALLBACK!!")
-        self.insult()
 
     def insult(self):
         self.insultr.speak_next_insult()
@@ -174,11 +171,10 @@ if __name__ == "__main__":
         level=logging.DEBUG, 
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     stack = PiTinkerforgeStack()
-    stack.connect()
     if stack.poti_left:
-        print "Poti left position  : ", stack.poti_left.get_position()
+        stack.log("Poti left position  : {}".format(stack.poti_left.get_position()))
     if stack.poti_volume:
-        print "Poti volume position : ", stack.poti_volume.get_position()
+        stack.log("Poti volume position : {}".format(stack.poti_volume.get_position()))
     stack.insultr.say_hello()
 
     sleep(1000000)
