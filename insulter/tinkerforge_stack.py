@@ -186,7 +186,11 @@ class PiTinkerforgeStack:
 
         if interrupt_mask == 8:
             self.log("io_lights() Shutdown button...")
-        if interrupt_mask == 4:
+            button_up = value_mask&8
+            self.log("io_switch() button_up=" + str(button_up))
+            if button_up == 8:
+                self.insult()
+        elif interrupt_mask == 4:
             self.log("io_lights() Sex switched...")
         else: 
             self.log("io_lights() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
