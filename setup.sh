@@ -28,7 +28,7 @@ apt-get install -y --no-install-recommends \
 	supervisor
 
 #sound
-apt-get apt-get install -y --no-install-recommends \
+apt-get install -y --no-install-recommends \
 	apt-utils \
     alsa-base \
 	alsa-utils \
@@ -37,6 +37,8 @@ apt-get apt-get install -y --no-install-recommends \
     sox \
     vim
 
+mkdir -p /tmp/build-insultr
+cd /tmp/build-insultr
 
 # install pip
 curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
@@ -46,7 +48,7 @@ python get-pip.py
 pip install tinkerforge
 
 # install brickd 
-curl -SL "http://download.tinkerforge.com/tools/brickd/linux/brickd-${BRICKD_VERSION}_armhf.deb" -o brickd.deb
+curl -SL "http://download.tinkerforge.com/tools/brickd/linux/brickd-2.2.2_armhf.deb" -o brickd.deb
 dpkg -i brickd.deb
 rm brickd.deb
 cp brickd /etc/init.d/
@@ -55,10 +57,9 @@ cp brickd /etc/init.d/
 mkdir -p /root/.ssh/
 ssh-keyscan github.com >> /root/.ssh/known_hosts
 
-cd /tmp
 git clone https://github.com/mikebrady/shairport-sync.git
 
-cd /tmp/shairport-sync && \
+cd /tmp/build-insultr/shairport-sync && \
     autoreconf -i -f && \
     ./configure --with-alsa --with-avahi --with-ssl=openssl --with-systemd && \
     make && \
