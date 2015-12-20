@@ -163,8 +163,9 @@ class PiTinkerforgeStack:
                     self.insult()
             else: 
                 self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask))
-        except Error as e:
-            self.log("io_switch() ERROR:{}".format(e))
+        except:
+            e = sys.exc_info()[0]
+            self.log("io_switch() ERROR: {}".format(e))
             
         self.log("io_switch() end")
 
