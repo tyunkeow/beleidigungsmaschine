@@ -17,7 +17,8 @@ class PiTinkerforgeStack:
     host = socket.gethostname()
     port = 4223
     female = False
-    io = None
+    io4_switch = None
+    io4_lights = None
     poti_left = None
     poti_volume = None
     master = None
@@ -66,30 +67,32 @@ class PiTinkerforgeStack:
             self.log("cb_enumerate(): id {} - Found device: ident={}, position={}".format(uid, device_identifier, position))
             if device_identifier == IO4.DEVICE_IDENTIFIER:
                 self.log("cb_enumerate(): id {} - Creating IO4 device object".format(uid))
-                self.io = IO4(uid, self.con) 
-                self.io.set_debounce_period(1000)
+                io = IO4(uid, self.con) 
+                io.set_debounce_period(1000)
 
                 if position == 'a':
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position a (switches).".format(uid))
-                    self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
+                    self.io4_switch = io
+                    self.io4_switch.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
 
                     # pin 0 input pullup
-                    #self.io.set_configuration(1, 'i', True)
+                    #self.io4_switch.set_configuration(1, 'i', True)
 
                     # pin 1 input default
-                    #self.io.set_configuration(2, 'i', False)
+                    #self.io4_switch.set_configuration(2, 'i', False)
 
                     # pin 2 and 3 input pullup
-                    #self.io.set_configuration(15, 'i', True)
+                    #self.io4_switch.set_configuration(15, 'i', True)
 
                     # Enable interrupt on pin 0 and 1
-                    self.io.set_interrupt(1 << 0)
-                    self.io.set_interrupt(1 << 1)
-                    self.io.set_interrupt(1 << 2)
-                    self.io.set_interrupt(1 << 3)
+                    self.io4_switch.set_interrupt(1 << 0)
+                    self.io4_switch.set_interrupt(1 << 1)
+                    self.io4_switch.set_interrupt(1 << 2)
+                    self.io4_switch.set_interrupt(1 << 3)
                 else:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
-                    self.io.set_configuration((1 << 0) | (1 << 1), "o", True)
+                    self.io4_lights = io
+                    self.io4_lights.set_configuration((1 << 0) | (1 << 1), "o", True)
 
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
                 self.log("cb_enumerate(): id {} - Creating RotaryPoti device object".format(uid))
