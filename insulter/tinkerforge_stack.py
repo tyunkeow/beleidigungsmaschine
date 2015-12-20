@@ -80,7 +80,7 @@ class PiTinkerforgeStack:
                     #self.io.set_configuration(2, 'i', False)
 
                     # pin 2 and 3 input pullup
-                    self.io.set_configuration(15, 'i', True)
+                    #self.io.set_configuration(15, 'i', True)
 
                     # Enable interrupt on pin 0 and 1
                     self.io.set_interrupt(1 << 0)
