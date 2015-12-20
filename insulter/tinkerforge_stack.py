@@ -76,6 +76,8 @@ class PiTinkerforgeStack:
                     # Enable interrupt on pin 0 and 1
                     self.io.set_interrupt(1 << 0)
                     self.io.set_interrupt(1 << 1)
+                    self.io.set_interrupt(1 << 2)
+                    self.io.set_interrupt(1 << 3)
                     #self.set_ziel_geschlecht(self.io.get_value())
                 else:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
@@ -133,7 +135,7 @@ class PiTinkerforgeStack:
     def io_switch(self, interrupt_mask, value_mask):
         self.log("io_switch() IO4 triggered")
         self.log("io_switch() Interrupt by {} / {} ".format(str(bin(interrupt_mask)), interrupt_mask))
-        self.log('io_switch() Value: ' + str(bin(value_mask)))
+        self.log('io_switch() Value mask: ' + str(bin(value_mask)))
         
         try: 
             #self.log("io_switch() Setting volume...")
@@ -146,7 +148,7 @@ class PiTinkerforgeStack:
             elif interrupt_mask == 2:
                 self.log("io_switch() Insult button pressed...")
                 button_up = value_mask&2
-                self.log("io_switch() value_mask =" + str(button_up))
+                self.log("io_switch() button_up=" + str(button_up))
                 if button_up == 2:
                     self.insult()
             else: 
