@@ -32,6 +32,9 @@ class PiTinkerforgeStack:
         self.con.register_callback(IPConnection.CALLBACK_CONNECTED, 
                                      self.cb_connected)
 
+        self.log("")
+        self.log("")
+        self.log("")
         self.log("PiTinkerforgeStack(): Connecting to host " + self.host + " on port " + str(self.port))
         self.con.connect(self.host, self.port)
         self.log("PiTinkerforgeStack(): enumerate...")
