@@ -86,17 +86,14 @@ class PiTinkerforgeStack:
                     #self.io4_switch.set_configuration(15, 'i', True)
 
                     # Enable interrupt on pin 0 and 1
-                    self.io4_switch.set_interrupt(1 << 0)
-                    self.io4_switch.set_interrupt(1 << 1)
-                    self.io4_switch.set_interrupt(1 << 2)
-                    self.io4_switch.set_interrupt(1 << 3)
+                    #self.io4_switch.set_interrupt(1 << 0)
+                    self.io4_switch.set_interrupt(15)
                 else:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
                     self.io4_lights = io
                     self.io4_lights.set_configuration((1 << 0) | (1 << 1), "o", True)
                     self.io4_lights.register_callback(self.io4_lights.CALLBACK_INTERRUPT, self.cb_io_lights)
-                    self.io4_lights.set_interrupt(1 << 2)
-                    self.io4_lights.set_interrupt(1 << 3)
+                    self.io4_lights.set_interrupt(15)
 
 
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
