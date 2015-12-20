@@ -5,13 +5,11 @@ apt-get update -q
 apt-get update && apt-get install -y \
 	apt-utils \
     alsa-base \
-	alsa-utils \  
+	alsa-utils \
 	libasound2-dev \
     libasound2-plugin-equal \
     sox \
     vim
-
-pip install tinkerforge
 
 apt-get install -y --no-install-recommends \
 	autoconf \
@@ -29,9 +27,14 @@ apt-get install -y --no-install-recommends \
 	libgpg-error0 \
 	libnss-mdns \
 	libpopt-dev \
-	libssl-dev \ 
+	libssl-dev \
 	ssh \
 	supervisor
+
+curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
+python get-pip.py
+
+pip install tinkerforge
 
 mkdir /root/.ssh/
 ssh-keyscan github.com >> /root/.ssh/known_hosts

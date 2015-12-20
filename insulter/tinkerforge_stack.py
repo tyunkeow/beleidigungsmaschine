@@ -7,7 +7,7 @@ from time import sleep
 import os
 import sys
 from insultr import Insultr
-import syslog
+import logging
 
 
 class PiTinkerforgeStack:
@@ -22,7 +22,6 @@ class PiTinkerforgeStack:
     master = None
 
     def __init__(self):
-        syslog.openlog('insultr-tf', 0, syslog.LOG_LOCAL4)
 
         self.con = IPConnection()
 
@@ -38,8 +37,8 @@ class PiTinkerforgeStack:
         self.log("---" + str(15^14))
 
     def log(self, msg):
-        syslog.syslog(msg)
-        print msg
+        logging.info(msg)
+        #print msg
 
     def connect(self):
         self.log("Connecting to host " + self.host + " on port " + str(self.port))
@@ -181,6 +180,7 @@ class PiTinkerforgeStack:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename='/var/log/insultr.log',level=logging.DEBUG)
     stack = PiTinkerforgeStack()
     stack.connect()
     if stack.poti_left:

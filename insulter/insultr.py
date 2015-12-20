@@ -4,7 +4,7 @@
 import os
 import json
 import random
-import syslog
+import logging
 
 MY_DIR = os.path.dirname(os.path.abspath(__file__))
 AUDIO_DB_DIR = os.getenv('AUDIO_DB_DIR', MY_DIR + "/../insult_db")
@@ -31,9 +31,9 @@ class Insultr:
 
     def __init__(self):
 
-        syslog.openlog('insultr', 0, syslog.LOG_LOCAL4)
-        print "MY_DIR={}".format(MY_DIR)
-        print "AUDIO_DB_DIR={}".format(AUDIO_DB_DIR)
+        
+        log("MY_DIR={}".format(MY_DIR))
+        log("AUDIO_DB_DIR={}".format(AUDIO_DB_DIR))
 
         self.log("Opening {} ...".format(AUDIO_DB_FILE))
         with open(AUDIO_DB_FILE) as json_data:
@@ -80,7 +80,7 @@ class Insultr:
 
     def log(self, msg):
         print msg
-        syslog.syslog(msg)
+        logging.info(msg)
 
 if __name__ == "__main__":
     insultr = Insultr()
