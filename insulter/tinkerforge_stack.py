@@ -73,7 +73,7 @@ class PiTinkerforgeStack:
                 if position == 'a':
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position a (switches).".format(uid))
                     self.io4_switch = io
-                    self.io4_switch.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
+                    self.io4_switch.register_callback(self.io4_switch.CALLBACK_INTERRUPT, self.io_switch)
 
                     # pin 0 input pullup
                     #self.io4_switch.set_configuration(1, 'i', True)
