@@ -8,12 +8,13 @@ import os
 import sys
 from insultr import Insultr
 import logging
+import socket
 
 
 class PiTinkerforgeStack:
     #host = '192.168.178.36' #raspi
     #host = '127.0.0.1' #localhost
-    host = 'brickd'
+    host = socket.gethostname()
     port = 4223
     female = False
     io = None
