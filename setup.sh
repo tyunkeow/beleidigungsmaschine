@@ -38,7 +38,6 @@ apt-get install -y --no-install-recommends \
     vim
 
 mkdir -p /tmp/build-insultr
-#cd /tmp/build-insultr
 
 # install pip
 curl https://bootstrap.pypa.io/get-pip.py > /tmp/build-insultr/get-pip.py
@@ -47,21 +46,8 @@ python /tmp/build-insultr/get-pip.py
 # install tinkerforge
 pip install tinkerforge
 
-# install brickd 
-curl -SL "http://download.tinkerforge.com/tools/brickd/linux/brickd-latest_armhf.deb" -o /tmp/build-insultr/brickd.deb
-dpkg -i /tmp/build-insultr/brickd.deb
-rm /tmp/build-insultr/brickd.deb
-cp brickd.sh /etc/init.d/
+#install brickd
+setup-brickd.sh
 
 # install shairport
-mkdir -p /root/.ssh/
-ssh-keyscan github.com >> /root/.ssh/known_hosts
-
-git clone https://github.com/mikebrady/shairport-sync.git /tmp/build-insultr/shairport-sync
-
-cd /tmp/build-insultr/shairport-sync && \
-    autoreconf -i -f && \
-    ./configure --with-alsa --with-avahi --with-ssl=openssl --with-systemd && \
-    make && \
-    make install 
-
+setup-shairport.sh
