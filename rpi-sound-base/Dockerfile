@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
 	alsa-utils \  
 	libasound2-dev \
     libasound2-plugin-equal \
-    sox
+    sox \
+    vim
 
 ADD asound.conf /etc/asound.conf
+ADD asound.conf.bak /etc/asound.conf.bak
