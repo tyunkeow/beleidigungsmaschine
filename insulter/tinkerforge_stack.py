@@ -24,6 +24,8 @@ class PiTinkerforgeStack:
     master = None
 
     def __init__(self):
+        self.insultr = Insultr()
+        self.set_volume(50)
 
         self.con = IPConnection()
 
@@ -43,8 +45,7 @@ class PiTinkerforgeStack:
         sleep(5)
         self.log("PiTinkerforgeStack(): done.")
 
-        self.insultr = Insultr()
-        self.set_volume(50)
+        
         #self.log("PiTinkerforgeStack(): str(15^15)=" + str(15^15))
         #self.log("PiTinkerforgeStack(): str(15^14)=" + str(15^14))
 
@@ -183,9 +184,9 @@ class PiTinkerforgeStack:
         self.log("io_lights() Value mask: {} = {}".format(value_mask_str, value_mask))
 
         if interrupt_mask == 3:
-            self.log("io_switch() Shutdown button...")
+            self.log("io_lights() Shutdown button...")
         else: 
-            self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
+            self.log("io_lights() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
 
     def set_ziel_geschlecht(self, value_mask):
         is_on = value_mask^14
