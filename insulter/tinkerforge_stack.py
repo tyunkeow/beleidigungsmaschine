@@ -198,14 +198,14 @@ class PiTinkerforgeStack:
             self.log("sex was set to MALE")
             self.female = False
             self.insultr.set_maennlich()
-            self.io.set_configuration(1 << 0, "o", True)
-            self.io.set_configuration(1 << 1, "o", False)
+            self.io_lights.set_configuration(1 << 0, "o", True)
+            self.io_lights.set_configuration(1 << 1, "o", False)
         else:
             self.log("sex was set to FEMALE")
             self.female = True
             self.insultr.set_weiblich()
-            self.io.set_configuration(1 << 0, "o", False)
-            self.io.set_configuration(1 << 1, "o", True)
+            self.io_lights.set_configuration(1 << 0, "o", False)
+            self.io_lights.set_configuration(1 << 1, "o", True)
 
 
 
