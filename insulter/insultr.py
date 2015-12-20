@@ -15,7 +15,6 @@ FILENAME_PATTERN = '/insult{}.ogg'
 # play audio with SoX
 def play_sound(filename, pitch=0, tempo=1):
     filename = os.path.expanduser(filename)
-    logging.debug("play_sound(): Playing file {}".format(filename))
     cmd = 'play {} pitch {} speed {} bass +3'.format(filename, pitch, tempo)
     logging.info("play_sound(): cmd: {}".format(cmd))
     os.system(cmd)
@@ -80,7 +79,7 @@ class Insultr:
         logging.info(msg)
 
 if __name__ == "__main__":
-    logging.basicConfig(filename='/var/log/insultr.log',level=logging.DEBUG)
+    #logging.basicConfig(filename='/var/log/insultr.log',level=logging.DEBUG)
     insultr = Insultr()
     #insulter.create_insult_audio_db()
 
