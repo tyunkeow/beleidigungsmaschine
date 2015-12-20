@@ -37,8 +37,9 @@ class PiTinkerforgeStack:
         self.log("")
         self.log("PiTinkerforgeStack(): Connecting to host " + self.host + " on port " + str(self.port))
         self.con.connect(self.host, self.port)
-        self.log("PiTinkerforgeStack(): enumerate...")
+        self.log("PiTinkerforgeStack(): enumerate... waitung 5 seconds...")
         self.con.enumerate()
+        time.sleep(5)
         self.log("PiTinkerforgeStack(): done.")
 
         self.insultr = Insultr()
@@ -75,7 +76,7 @@ class PiTinkerforgeStack:
                     # Enable interrupt on pin 0 and 1
                     self.io.set_interrupt(1 << 0)
                     self.io.set_interrupt(1 << 1)
-                    self.set_ziel_geschlecht(self.io.get_value())
+                    #self.set_ziel_geschlecht(self.io.get_value())
                 else:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
                     self.io.set_configuration((1 << 0) | (1 << 1), "o", True)
@@ -135,7 +136,8 @@ class PiTinkerforgeStack:
         self.log('io_switch() Value: ' + str(bin(value_mask)))
         
         try: 
-            self.set_volume_from_poti()
+            #self.log("io_switch() Setting volume...")
+            #self.set_volume_from_poti()
 
             if interrupt_mask == 1:
                 self.log("io_switch() Sex switched...")
