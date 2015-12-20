@@ -147,25 +147,25 @@ class PiTinkerforgeStack:
         self.log("io_switch() Interrupt mask {} = {} ".format(interrupt_mask_str, interrupt_mask))
         self.log("io_switch() Value mask: {} = {}".format(value_mask_str, value_mask))
         
-        try: 
+        #try: 
             #self.log("io_switch() Setting volume...")
             #self.set_volume_from_poti()
 
-            if interrupt_mask == 1:
-                self.log("io_switch() Sex switched...")
-                # button 1 switched
-                self.set_ziel_geschlecht(value_mask)
-            elif interrupt_mask == 2:
-                self.log("io_switch() Insult button pressed...")
-                button_up = value_mask&2
-                self.log("io_switch() button_up=" + str(button_up))
-                if button_up == 2:
-                    self.insult()
-            else: 
-                self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask))
-        except:
-            e = sys.exc_info()[0]
-            self.log("io_switch() ERROR: {}".format(e))
+        if interrupt_mask == 1:
+            self.log("io_switch() Sex switched...")
+            # button 1 switched
+            self.set_ziel_geschlecht(value_mask)
+        elif interrupt_mask == 2:
+            self.log("io_switch() Insult button pressed...")
+            button_up = value_mask&2
+            self.log("io_switch() button_up=" + str(button_up))
+            if button_up == 2:
+                self.insult()
+        else: 
+            self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask))
+        #except:
+        #    e = sys.exc_info()[0]
+        #    self.log("io_switch() ERROR: {}".format(e))
             
         self.log("io_switch() end")
 
