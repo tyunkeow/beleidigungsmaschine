@@ -15,10 +15,9 @@ FILENAME_PATTERN = '/insult{}.ogg'
 # play audio with SoX
 def play_sound(filename, pitch=0, tempo=1):
     filename = os.path.expanduser(filename)
-    print "Playing file ", filename
-    #os.system('aplay -D sysdefault:CARD=Device {}'.format(filename))
+    logging.debug("play_sound(): Playing file {}".format(filename)
     cmd = 'play {} pitch {} speed {} bass +3'.format(filename, pitch, tempo)
-    print "cmd:", cmd
+    logging.info("play_sound(): cmd: {}".format(cmd))
     os.system(cmd)
 
 class Insultr:
@@ -30,15 +29,15 @@ class Insultr:
     last_steigerung = None
 
     def __init__(self):
-        self.log("MY_DIR={}".format(MY_DIR))
-        self.log("AUDIO_DB_DIR={}".format(AUDIO_DB_DIR))
+        self.log("Insultr(): MY_DIR={}".format(MY_DIR))
+        self.log("Insultr(): AUDIO_DB_DIR={}".format(AUDIO_DB_DIR))
 
-        self.log("Opening {} ...".format(AUDIO_DB_FILE))
+        self.log("Insultr(): Opening {} ...".format(AUDIO_DB_FILE))
         with open(AUDIO_DB_FILE) as json_data:
             self.ins_data = json.load(json_data)
             json_data.close()
         
-        self.log("Opening {} ...".format(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT))
+        self.log("Insultr(): Opening {} ...".format(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT))
         with open(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT) as json_data:
             self.zielgeschlecht2Id = json.load(json_data)
             json_data.close()
