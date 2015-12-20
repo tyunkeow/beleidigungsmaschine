@@ -48,7 +48,7 @@ python /tmp/build-insultr/get-pip.py
 pip install tinkerforge
 
 # install brickd 
-curl -SL "http://download.tinkerforge.com/tools/brickd/linux/brickd-2.2.2_armhf.deb" -o /tmp/build-insultr/brickd.deb
+curl -SL "http://download.tinkerforge.com/tools/brickd/linux/brickd-latest_armhf.deb" -o /tmp/build-insultr/brickd.deb
 dpkg -i /tmp/build-insultr/brickd.deb
 rm /tmp/build-insultr/brickd.deb
 cp brickd.sh /etc/init.d/
