@@ -15,3 +15,7 @@ service dbus start
 
 echo "Starting avahi-daemon"
 avahi-daemon --no-drop-root
+
+echo "Starting shairport-sync"
+shairport-sync
+
