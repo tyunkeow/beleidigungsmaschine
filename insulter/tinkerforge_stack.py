@@ -74,13 +74,13 @@ class PiTinkerforgeStack:
                     self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
 
                     # pin 0 input pullup
-                    self.io.set_configuration(1, 'i', True)
+                    #self.io.set_configuration(1, 'i', True)
 
                     # pin 1 input default
-                    self.io.set_configuration(2, 'i', False)
+                    #self.io.set_configuration(2, 'i', False)
 
                     # pin 2 and 3 input pullup
-                    self.io.set_configuration(12, 'i', True)
+                    self.io.set_configuration(15, 'i', True)
 
                     # Enable interrupt on pin 0 and 1
                     self.io.set_interrupt(1 << 0)
