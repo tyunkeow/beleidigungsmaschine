@@ -30,10 +30,8 @@ class Insultr:
     last_steigerung = None
 
     def __init__(self):
-
-        
-        log("MY_DIR={}".format(MY_DIR))
-        log("AUDIO_DB_DIR={}".format(AUDIO_DB_DIR))
+        self.log("MY_DIR={}".format(MY_DIR))
+        self.log("AUDIO_DB_DIR={}".format(AUDIO_DB_DIR))
 
         self.log("Opening {} ...".format(AUDIO_DB_FILE))
         with open(AUDIO_DB_FILE) as json_data:
@@ -83,6 +81,7 @@ class Insultr:
         logging.info(msg)
 
 if __name__ == "__main__":
+    logging.basicConfig(filename='/var/log/insultr.log',level=logging.DEBUG)
     insultr = Insultr()
     #insulter.create_insult_audio_db()
 
