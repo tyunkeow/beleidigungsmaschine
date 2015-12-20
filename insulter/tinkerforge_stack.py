@@ -72,13 +72,21 @@ class PiTinkerforgeStack:
                 if position == 'a':
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position a (switches).".format(uid))
                     self.io.register_callback(self.io.CALLBACK_INTERRUPT, self.io_switch)
-                    self.io.set_configuration(15, 'i', True)
+
+                    # pin 0 input pullup
+                    self.io.set_configuration(1, 'i', True)
+
+                    # pin 1 input default
+                    self.io.set_configuration(2, 'i', False)
+
+                    # pin 2 and 3 input pullup
+                    self.io.set_configuration(12, 'i', True)
+
                     # Enable interrupt on pin 0 and 1
                     self.io.set_interrupt(1 << 0)
                     self.io.set_interrupt(1 << 1)
                     self.io.set_interrupt(1 << 2)
                     self.io.set_interrupt(1 << 3)
-                    #self.set_ziel_geschlecht(self.io.get_value())
                 else:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
                     self.io.set_configuration((1 << 0) | (1 << 1), "o", True)
@@ -134,8 +142,10 @@ class PiTinkerforgeStack:
 
     def io_switch(self, interrupt_mask, value_mask):
         self.log("io_switch() IO4 triggered")
-        self.log("io_switch() Interrupt by {} / {} ".format(str(bin(interrupt_mask)), interrupt_mask))
-        self.log('io_switch() Value mask: ' + str(bin(value_mask)))
+        interrupt_mask_str = format(interrupt_mask, "04b")
+        value_mask_str = format(value_mask, "04b")
+        self.log("io_switch() Interrupt mask {} = {} ".format(interrupt_mask_str, interrupt_mask))
+        self.log("io_switch() Value mask: {} = {}".format(value_mask_str, value_mask))
         
         try: 
             #self.log("io_switch() Setting volume...")
