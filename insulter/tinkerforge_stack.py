@@ -74,19 +74,9 @@ class PiTinkerforgeStack:
                 if position == 'a':
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position a (switches).".format(uid))
                     self.io4_switch = io
-                    self.io4_switch.register_callback(self.io4_switch.CALLBACK_INTERRUPT, self.io_switch)
+                    self.io4_switch.register_callback(self.io4_switch.CALLBACK_INTERRUPT, self.cb_io_switches)
 
-                    # pin 0 input pullup
-                    #self.io4_switch.set_configuration(1, 'i', True)
-
-                    # pin 1 input default
-                    #self.io4_switch.set_configuration(2, 'i', False)
-
-                    # pin 2 and 3 input pullup
-                    #self.io4_switch.set_configuration(15, 'i', True)
-
-                    # Enable interrupt on pin 0 and 1
-                    #self.io4_switch.set_interrupt(1 << 0)
+                    # set interrupt for all 4 inputs (binary 1111)
                     self.io4_switch.set_interrupt(15)
                 else:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
@@ -94,7 +84,7 @@ class PiTinkerforgeStack:
                     self.io4_lights.set_configuration((1 << 0), "o", self.female)
                     self.io4_lights.set_configuration((1 << 1), "o", not self.female)
                     self.io4_lights.register_callback(self.io4_lights.CALLBACK_INTERRUPT, self.cb_io_lights)
-                    self.io4_lights.set_interrupt(15)
+                    self.io4_lights.set_interrupt(4)
 
 
             elif device_identifier == RotaryPoti.DEVICE_IDENTIFIER:
@@ -146,29 +136,29 @@ class PiTinkerforgeStack:
     def motion_cycle_ended(self):
         self.log("READY for motion detection!")
 
-    def io_switch(self, interrupt_mask, value_mask):
-        self.log("io_switch() IO4 triggered")
+    def cb_io_switches(self, interrupt_mask, value_mask):
+        self.log("cb_io_switches() IO4 triggered")
         interrupt_mask_str = format(interrupt_mask, "04b")
         value_mask_str = format(value_mask, "04b")
-        self.log("io_switch() Interrupt mask {} = {} ".format(interrupt_mask_str, interrupt_mask))
-        self.log("io_switch() Value mask: {} = {}".format(value_mask_str, value_mask))
+        self.log("cb_io_switches() Interrupt mask {} = {} ".format(interrupt_mask_str, interrupt_mask))
+        self.log("cb_io_switches() Value mask: {} = {}".format(value_mask_str, value_mask))
         
         #try: 
             #self.log("io_switch() Setting volume...")
             #self.set_volume_from_poti()
 
         if interrupt_mask == 1:
-            self.log("io_switch() Sex switched...")
+            self.log("cb_io_switches() Sex switched...")
             # button 1 switched
             self.set_ziel_geschlecht(value_mask)
         elif interrupt_mask == 2:
-            self.log("io_switch() Insult button pressed...")
+            self.log("cb_io_switches() Insult button pressed...")
             button_up = value_mask&2
-            self.log("io_switch() button_up=" + str(button_up))
+            self.log("cb_io_switches() button_up=" + str(button_up))
             if button_up == 2:
                 self.insult()
         else: 
-            self.log("io_switch() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
+            self.log("cb_io_switches() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
         #except:
         #    e = sys.exc_info()[0]
         #    self.log("io_switch() ERROR: {}".format(e))
@@ -176,22 +166,16 @@ class PiTinkerforgeStack:
         self.log("io_switch() end")
 
     def cb_io_lights(self, interrupt_mask, value_mask):
-        self.log("io_lights() IO4 triggered")
+        self.log("cb_io_lights() IO4 triggered")
         interrupt_mask_str = format(interrupt_mask, "04b")
         value_mask_str = format(value_mask, "04b")
-        self.log("io_lights() Interrupt mask {} = {} ".format(interrupt_mask_str, interrupt_mask))
-        self.log("io_lights() Value mask: {} = {}".format(value_mask_str, value_mask))
+        self.log("cb_io_lights() Interrupt mask {} = {} ".format(interrupt_mask_str, interrupt_mask))
+        self.log("cb_io_lights() Value mask: {} = {}".format(value_mask_str, value_mask))
 
-        if interrupt_mask == 8:
-            self.log("io_lights() Shutdown button...")
-            button_up = value_mask&8
-            self.log("io_switch() button_up=" + str(button_up))
-            if button_up == 8:
-                self.insult()
-        elif interrupt_mask == 4:
-            self.log("io_lights() Sex switched...")
+        if interrupt_mask == 4:
+            self.log("cb_io_lights() Shutdown button...")
         else: 
-            self.log("io_lights() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
+            self.log("cb_io_lights() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
 
     def set_ziel_geschlecht(self, value_mask):
         is_on = value_mask^14
