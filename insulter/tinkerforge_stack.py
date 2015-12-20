@@ -45,6 +45,7 @@ class PiTinkerforgeStack:
 
     def log(self, msg):
         logging.info(msg)
+        print msg
 
     def disconnect(self):
         self.log("disconnect(): Disconnecting from host " + self.host)
@@ -92,7 +93,7 @@ class PiTinkerforgeStack:
         # Enumerate devices again. If we reconnected, the Bricks/Bricklets
         # may have been offline and the configuration may be lost.
         # In this case we don't care for the reason of the connection
-        print "######################"
+        self.log("cb_connected(): connected_reason={}".format(connected_reason))
         self.con.enumerate()    
 
     def insult(self):
