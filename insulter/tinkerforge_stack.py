@@ -92,7 +92,7 @@ class PiTinkerforgeStack:
                     self.log("cb_enumerate(): id {} - Configuring IO4 device object at position ? (lights, shutdown).".format(uid))
                     self.io4_lights = io
                     self.io4_lights.set_configuration((1 << 0), "o", self.female)
-                    self.io4_lights.set_configuration((1 << 1), "o", !self.female)
+                    self.io4_lights.set_configuration((1 << 1), "o", not self.female)
                     self.io4_lights.register_callback(self.io4_lights.CALLBACK_INTERRUPT, self.cb_io_lights)
                     self.io4_lights.set_interrupt(15)
 
