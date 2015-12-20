@@ -17,5 +17,5 @@ echo "Starting avahi-daemon"
 avahi-daemon --no-drop-root
 
 echo "Starting shairport-sync"
-shairport-sync
+shairport-sync 2>&1 > /var/log/shairport.log
 
