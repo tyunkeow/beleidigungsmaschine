@@ -17,5 +17,8 @@ echo "Starting avahi-daemon"
 avahi-daemon --no-drop-root
 
 echo "Starting shairport-sync"
-shairport-sync 2>&1 > /var/log/shairport.log
+(shairport-sync 2>&1 > /var/log/shairport.log) &
 
+echo "Starting Insultr..."
+rm /var/log/insultr.log
+python insulter/tinkerforge_stack.py &
