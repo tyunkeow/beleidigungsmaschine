@@ -64,6 +64,9 @@ class Insultr:
 
     def say_hello(self):
         play_sound(AUDIO_DB_DIR + "/audio" + "/hello.ogg")
+        
+    def say_goodbye(self):
+        play_sound(AUDIO_DB_DIR + "/goodbye.ogg")
 
     def set_maennlich(self):
         play_sound(AUDIO_DB_DIR + "/audio" + "/ModusMaennlich.ogg")

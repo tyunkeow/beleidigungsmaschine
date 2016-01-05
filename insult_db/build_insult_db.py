@@ -13,6 +13,7 @@ FILENAME_PATTERN = '/insult{}'
 
 # special sound files
 HELLO_FILE = AUDIO_DB_DIR + "/hello"
+GOODBYE_FILE = AUDIO_DB_DIR + "/goodbye"
 MODUS_MAENNLICH_FILE = AUDIO_DB_DIR + "/ModusMaennlich"
 MODUS_WEIBLICH_FILE = AUDIO_DB_DIR + "/ModusWeiblich"
 
@@ -61,6 +62,7 @@ class InsultDBFactory:
             os.makedirs(AUDIO_DB_DIR)
 
         text2soundfile("Beleidigungsmaschine, einsatzbereit", HELLO_FILE)
+        text2soundfile("Beleidigungsmaschine wird heruntergefahren", GOODBYE_FILE)
         text2soundfile("Beleidigungsmodus, maennlich", MODUS_MAENNLICH_FILE)
         text2soundfile("Beleidigungsmodus, weiblich", MODUS_WEIBLICH_FILE)
 
@@ -120,9 +122,6 @@ class InsultDBFactory:
         out_file = open(AUDIO_DB_FILE_INDEX_ZIELGESCHLECHT,"w")
         json.dump(insult_db_index_zielgeschlecht, out_file, indent=4)    
         out_file.close()
-
-    def say_hello(self):
-        play_sound(AUDIO_DB_DIR + "/hello.ogg")
 
     def log(self, msg):
         print msg
