@@ -21,4 +21,4 @@ echo "Starting shairport-sync"
 
 echo "Starting Insultr..."
 rm /var/log/insultr.log
-python insulter/tinkerforge_stack.py &
+python $SCRIPTPATH/insulter/tinkerforge_stack.py &

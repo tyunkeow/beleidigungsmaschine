@@ -174,6 +174,7 @@ class PiTinkerforgeStack:
 
         if interrupt_mask == 4:
             self.log("cb_io_lights() Shutdown button...")
+            os.system("shutdown now")
         else: 
             self.log("cb_io_lights() Don't know what to do with interrupt_mask {}".format(interrupt_mask_str))
 
